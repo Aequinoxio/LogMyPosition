@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">LogMyPosition</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="lblStatoLog">Stato servizio logging</string>
+    <string name="txtStatoLogging">------------------------</string>
+    <string name="NoValue">-------</string>
+    <string name="txtStatoLoggingRunning">In esecuzione</string>
+    <string name="txtStatoLoggingStopped">Fermato</string>
+    <string name="btnAvviaLog">Inizia log</string>
+    <string name="stopServiceButtonText">Ferma log</string>
+    <string name="startServiceButtonText">Inizia log</string>
+    <string name="btnGoInBackground"><![CDATA[Background & esci]]></string>
+    <string name="noGPSInfo">Gps non attivo o non disponibile per l\'applicazione\nNon mi attivo</string>
+    <string name="lblLongitudine">long</string>
+    <string name="lblLatitudine">Lat</string>
+    <string name="lblAltitudine">Alt</string>
+    <string name="lblVelocita">Vel</string>
+    <string name="lblTempo">Tempo</string>
+    <string name="lblBussola">Buss</string>
+    <string name="lblAccuratezza">Acc</string>
+    <string name="local_service_started">Servizio avviato</string>
+    <string name="local_service_stopped">Servizio fermato</string>
+    <string name="local_service_label">Log my position</string>
+    <string name="local_service_connected">Connesso al servizio</string>
+    <string name="local_service_disconnected">Disconnesso dal servizio</string>
+    <string name="lblStatoGPS">Stato GPS</string>
+    <string name="txtNumeroSatelliti">Numero satelliti</string>
+</resources>

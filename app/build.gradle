@@ -1,0 +1,29 @@
+apply plugin: 'com.android.application'
+apply from: "../artifacts.gradle"
+
+android {
+    compileSdkVersion 22
+    buildToolsVersion '19.1.0'
+    defaultConfig {
+        applicationId "com.example.utente.logmyposition"
+        minSdkVersion 19
+        targetSdkVersion 19
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFile 'C:/Program Files (x86)/Android/android-sdk/tools/proguard/proguard-android.txt'
+        }
+    }
+    productFlavors {
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.android.support:appcompat-v7:22.2.1'
+    compile 'com.android.support:support-v4:22.2.1'
+}
