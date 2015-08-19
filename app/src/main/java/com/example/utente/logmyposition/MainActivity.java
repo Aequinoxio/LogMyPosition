@@ -6,18 +6,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
     private double lat=0,lon=0,alt=0;
     private float  vel=0,dir=0,acc=0;
     private long   tempo=0;
+
+    private final int SETTINGS_RESULTCODE=1234;
 
     LocationManager locationManager=null;
 
@@ -66,6 +67,27 @@ public class MainActivity extends AppCompatActivity {
             impostaInterfaccia();
         }
     };
+
+    /**
+     * Aspetto qui che la sotto attività termini
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode==SETTINGS_RESULTCODE)
+        {
+            // Ricarico le preferences
+            ApplicationSettings.loadPreferences(getApplicationContext());
+        }
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             Intent intentSettings= new Intent(getApplicationContext(),SettingsActivity.class);
-            startActivity(intentSettings);
+            startActivityForResult(intentSettings, SETTINGS_RESULTCODE);
 
             return true;
         }
@@ -107,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
         TextView textView = (TextView) findViewById(R.id.txtStatoLogging);
 
         // Verifico lo stato pre attivazione
-        boolean servizioAvviato = ApplicationSettings.getStatoServizio();
+        boolean servizioAvviato = ApplicationSettings.isServiceEnabled();
         if (!servizioAvviato) {
             startService(new Intent(this, LogPositionService.class));
         } else{
@@ -119,12 +141,12 @@ public class MainActivity extends AppCompatActivity {
         progressBar.setVisibility(ApplicationUtility.getServiceStatusProgressVisibility(getApplicationContext(), servizioAvviato));
 
         // Lo stato di attivazione lo imposta il serviziostesso
-        // ApplicationSettings.setStatoServizio(!ApplicationSettings.getStatoServizio());
+        // ApplicationSettings.setStatoServizio(!ApplicationSettings.isServiceEnabled());
 
         serviceStartButton.setText(ApplicationUtility.getServiceStatusButtonLabel(getApplicationContext(), servizioAvviato));
         serviceStartButton.setChecked(servizioAvviato);
 
-        //s = (ApplicationSettings.getStatoServizio())?getString(R.string.stopServiceButtonText):getString(R.string.startServiceButtonText);
+        //s = (ApplicationSettings.isServiceEnabled())?getString(R.string.stopServiceButtonText):getString(R.string.startServiceButtonText);
         textView.setText(ApplicationUtility.getServiceStatusTextLabel(getApplicationContext(), servizioAvviato));
     }
     public void goInBackground(View v) {
@@ -140,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
         // Un po' sporca ma efficace
         // Recupero l'ultima posizione memorizzata accedendo a variabili protected
         // Di norma mi affido ad un broadcast receiver
-        if (ApplicationSettings.getStatoServizio()) {
+        if (ApplicationSettings.isServiceEnabled()) {
             lat = LogPositionLocationListener.lat;
             lon = LogPositionLocationListener.lon;
             alt = LogPositionLocationListener.alt;
@@ -189,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
         ApplicationSettings.loadPreferences(getApplicationContext());
 
         TextView textView = (TextView) findViewById(R.id.txtStatoLogging);
-        textView.setText(ApplicationUtility.getServiceStatusTextLabel(getApplicationContext(), ApplicationSettings.getStatoServizio()));
+        textView.setText(ApplicationUtility.getServiceStatusTextLabel(getApplicationContext(), ApplicationSettings.isServiceEnabled()));
 
         textView = (TextView) findViewById(R.id.valNumSat);
         textView.setText(String.format("%d", ApplicationSettings.getSatelliti()));
@@ -198,11 +220,11 @@ public class MainActivity extends AppCompatActivity {
         textView.setText(ApplicationUtility.getServiceStatusTextLabel(getApplicationContext(), locationManager.isProviderEnabled("gps")));
 
         ToggleButton button = (ToggleButton) findViewById(R.id.btnStartStopService);
-        button.setText(ApplicationUtility.getServiceStatusButtonLabel(getApplicationContext(), ApplicationSettings.getStatoServizio()));
-        button.setChecked(ApplicationSettings.getStatoServizio());
+        button.setText(ApplicationUtility.getServiceStatusButtonLabel(getApplicationContext(), ApplicationSettings.isServiceEnabled()));
+        button.setChecked(ApplicationSettings.isServiceEnabled());
 
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBarServiceRunning);
-        if (ApplicationSettings.getStatoServizio()) {
+        if (ApplicationSettings.isServiceEnabled()) {
             progressBar.setVisibility(View.VISIBLE);
             progressBar.setProgress(1);
         } else {
@@ -216,6 +238,13 @@ public class MainActivity extends AppCompatActivity {
 //            textView.setText( Html.fromHtml("<a href=\"file://"+f.getAbsolutePath()+"\">"+f.getAbsolutePath() +"</a>"));
 //            textView.setMovementMethod(LinkMovementMethod.getInstance());
         }
+
+        // TODO: solo per testare le settings preferences class
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String s = sp.getString("notifications_new_message_ringtone","");
+
+        textView = (TextView) findViewById(R.id.valNumSat);
+        textView.setText(s);
     }
 
     private void aggiornaValoriStatoGPS(){

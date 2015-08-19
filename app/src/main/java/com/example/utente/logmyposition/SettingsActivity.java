@@ -16,6 +16,7 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 
@@ -39,15 +40,26 @@ public class SettingsActivity extends PreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupActionBar();
+        //addPreferencesFromResource(R.xml.pref_data_sync);
+
     }
 
     /**
      * Impostato perchè altrimenti viene generata una runtime exception
+     *
+     * N.B. il codice è autoprodotto da Android Studio con new aettings activity
+     *
      * @param s
      * @return
      */
     @Override
     protected boolean isValidFragment(String s){
+        try {
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        Log.e(getClass().getSimpleName(),s);
         return true;
     }
 
@@ -58,6 +70,8 @@ public class SettingsActivity extends PreferenceActivity {
     private void setupActionBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             // Show the Up button in the action bar.
+            // Ho dovuto mettere l'if altrimenti si generava una nullpointerexception.
+            // N.B. il codice è autoprodotto da Android Studio con new aettings activity
             if (getActionBar()!=null)
                 getActionBar().setDisplayHomeAsUpEnabled(true);
         }
@@ -107,6 +121,7 @@ public class SettingsActivity extends PreferenceActivity {
     @Override
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void onBuildHeaders(List<Header> target) {
+        // Imposta gli header. Per eliminarli occorre mettere addPreferencesFromResource(R.xml.pref_data_sync) in onCreate
         loadHeadersFromResource(R.xml.pref_headers, target);
     }
 
@@ -131,29 +146,31 @@ public class SettingsActivity extends PreferenceActivity {
                                 ? listPreference.getEntries()[index]
                                 : null);
 
-            } else if (preference instanceof RingtonePreference) {
-                // For ringtone preferences, look up the correct display value
-                // using RingtoneManager.
-                if (TextUtils.isEmpty(stringValue)) {
-                    // Empty values correspond to 'silent' (no ringtone).
-                    preference.setSummary(R.string.pref_ringtone_silent);
-
-                } else {
-                    Ringtone ringtone = RingtoneManager.getRingtone(
-                            preference.getContext(), Uri.parse(stringValue));
-
-                    if (ringtone == null) {
-                        // Clear the summary if there was a lookup error.
-                        preference.setSummary(null);
-                    } else {
-                        // Set the summary to reflect the new ringtone display
-                        // name.
-                        String name = ringtone.getTitle(preference.getContext());
-                        preference.setSummary(name);
-                    }
-                }
-
-            } else {
+            }
+//            else if (preference instanceof RingtonePreference) {
+//                // For ringtone preferences, look up the correct display value
+//                // using RingtoneManager.
+//                if (TextUtils.isEmpty(stringValue)) {
+//                    // Empty values correspond to 'silent' (no ringtone).
+//                    preference.setSummary(R.string.pref_ringtone_silent);
+//
+//                } else {
+//                    Ringtone ringtone = RingtoneManager.getRingtone(
+//                            preference.getContext(), Uri.parse(stringValue));
+//
+//                    if (ringtone == null) {
+//                        // Clear the summary if there was a lookup error.
+//                        preference.setSummary(null);
+//                    } else {
+//                        // Set the summary to reflect the new ringtone display
+//                        // name.
+//                        String name = ringtone.getTitle(preference.getContext());
+//                        preference.setSummary(name);
+//                    }
+//                }
+//
+//            }
+            else {
                 // For all other preferences, set the summary to the value's
                 // simple string representation.
                 preference.setSummary(stringValue);
@@ -228,6 +245,7 @@ public class SettingsActivity extends PreferenceActivity {
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class DataSyncPreferenceFragment extends PreferenceFragment {
+        public DataSyncPreferenceFragment(){}
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -238,6 +256,7 @@ public class SettingsActivity extends PreferenceActivity {
             // updated to reflect the new value, per the Android Design
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("sync_frequency"));
+            bindPreferenceSummaryToValue(findPreference("sync_space"));
         }
     }
 }

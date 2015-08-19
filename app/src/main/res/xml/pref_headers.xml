@@ -2,16 +2,21 @@
 
     <!-- These settings headers are only used on tablets. -->
 
-    <header
-        android:fragment="com.example.utente.logmyposition.SettingsActivity$GeneralPreferenceFragment"
-        android:title="@string/pref_header_general" />
+    <!--<header-->
+        <!--android:fragment="com.example.utente.logmyposition.SettingsActivity$GeneralPreferenceFragment"-->
+        <!--android:title="@string/pref_header_general" />-->
 
-    <header
-        android:fragment="com.example.utente.logmyposition.SettingsActivity$NotificationPreferenceFragment"
-        android:title="@string/pref_header_notifications" />
+    <!--<header-->
+        <!--android:fragment="com.example.utente.logmyposition.SettingsActivity$NotificationPreferenceFragment"-->
+        <!--android:title="@string/pref_header_notifications" />-->
 
     <header
         android:fragment="com.example.utente.logmyposition.SettingsActivity$DataSyncPreferenceFragment"
-        android:title="@string/pref_header_data_sync" />
+        android:title="@string/pref_header_GPS_poll_parameters"
+        android:icon="@drawable/ic_action"/>
+
+    <!--<header-->
+        <!--android:fragment="com.example.utente.logmyposition.SettingsActivity$DataSyncPreferenceFragment"-->
+        <!--android:title="@string/pref_header_GPS_poll_space" />-->
 
 </preference-headers>

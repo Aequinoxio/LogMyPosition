@@ -211,7 +211,7 @@ public class LogPositionService extends Service implements GpsStatus.Listener {
         text+=(ApplicationSettings.isGPSAvailable()?" (GPS Abilitato)":" (GPS Disabilitato)");
 
         // Set the icon, scrolling text and timestamp
-        Notification notification = new Notification(R.drawable.ic_gps_fixed_white_18dp, text,
+        Notification notification = new Notification(R.drawable.ic_main_w, text,
                 System.currentTimeMillis());
 
         // The PendingIntent to launch our activity if the user selects this notification

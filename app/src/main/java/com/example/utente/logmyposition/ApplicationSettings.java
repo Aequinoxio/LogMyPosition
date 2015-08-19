@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Environment;
 import android.os.NetworkOnMainThreadException;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import java.io.File;
@@ -86,7 +87,7 @@ public class ApplicationSettings {
     public static boolean isGPSAvailable(){return GPSAvailable ;}
     public static void setGPSAvailable(boolean stato){GPSAvailable =stato;}
 
-    public static boolean getStatoServizio(){return servizioLogAttivato;}
+    public static boolean isServiceEnabled(){return servizioLogAttivato;}
 
     public static void setStatoServizio(boolean stato){
         servizioLogAttivato=stato;
@@ -146,6 +147,12 @@ public class ApplicationSettings {
             }
         }
         fileSalvataggio.setReadable(true,false);
+
+
+        // LEggo le shared_prefs impostate dall'activity SettingsActivity.java
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        minDistanceLocationUpdate=Float.valueOf (sp.getString("sync_space","10"));
+        minTimeLocationUpdate=Long.valueOf (sp.getString("sync_frequency","30"));
     }
 
     public static File getfileSalvataggio(){return fileSalvataggio;}
