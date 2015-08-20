@@ -20,11 +20,15 @@
     <string name="lblTempo">Tempo</string>
     <string name="lblBussola">Buss</string>
     <string name="lblAccuratezza">Acc</string>
-    <string name="local_service_started">Servizio avviato</string>
+    <string name="local_service_started">Servizio di registrazione avviato</string>
     <string name="local_service_stopped">Servizio fermato</string>
     <string name="local_service_label">Log my position</string>
     <string name="local_service_connected">Connesso al servizio</string>
     <string name="local_service_disconnected">Disconnesso dal servizio</string>
     <string name="lblStatoGPS">Stato GPS</string>
     <string name="txtNumeroSatelliti">Numero satelliti</string>
+    <string name="txtPollingTime">Polling time</string>
+    <string name="txtPollingSpace">Polling Space</string>
+    <string name="txtPuntiSalvati">Punti salvati</string>
+    <string name="txtFileName">File salvato</string>
 </resources>

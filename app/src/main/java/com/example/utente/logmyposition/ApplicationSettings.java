@@ -10,7 +10,11 @@ import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by utente on 14/08/2015.
@@ -43,6 +47,11 @@ public class ApplicationSettings {
     private static int maxSatelliti=0;
     private static int numSatelliti=0;
 
+    private static long puntiSalvati=0;
+
+    // Imposto comunque una UUID
+    private static UUID sessione=generaSessione();
+
     /**
      * Costruttore privato per il pattern Singleton
      */
@@ -61,6 +70,39 @@ public class ApplicationSettings {
     public static void setSatelliti(int num){
         setSatelliti(num, maxSatelliti);
     }
+
+
+    /**
+     * Genera una sessione randomica
+     * @return UUID generato
+     */
+    public static UUID generaSessione(){
+        sessione=UUID.randomUUID();
+        return sessione;
+    }
+
+    /**
+     * Ritorna la sessione generata
+     * @return
+     */
+    public static UUID getSessione(){return sessione;}
+
+    /**
+     * Resetta il numero di punti salvati
+     */
+    public static void resetPuntiSalvati(){puntiSalvati=0;}
+
+    /**
+     * Incrementa di uno il numero di punti salvati e li ritorna
+     * @return
+     */
+    public static long incrementaPuntiSalvati(){puntiSalvati++; return puntiSalvati;}
+
+    /**
+     * Ritorna il numero di punti salvati
+     * @return
+     */
+    public static long getPuntiSalvati(){return puntiSalvati;}
 
     /**
      * imposta il numero dei satelliti rilevati ed il massimo rilevato
@@ -112,6 +154,10 @@ public class ApplicationSettings {
         Map<String, ?> values = null;
         String filePath=null;
 
+        Date date= new Date();
+        SimpleDateFormat ft = new SimpleDateFormat ("yyyyMMdd", Locale.getDefault());
+        String filenameGiornaliero=ft.format(date)+".txt";
+
         try {
             values = sharedPreferences.getAll();
         } catch (NullPointerException npe){
@@ -128,6 +174,8 @@ public class ApplicationSettings {
         // fileSalvataggio = new File(context.getFilesDir(), "pippo.txt");
         // Creo una dir sulla SD
         File sd = new File(Environment.getExternalStorageDirectory() + "/LogMyPosition");
+
+        // Provo a creare la directory sulla sd
         boolean successCreaDir = true;
         if (!sd.exists()) {
             successCreaDir = sd.mkdir();
@@ -135,9 +183,9 @@ public class ApplicationSettings {
 
         // Se non riesco a creare la directory metto tutto nella subdir dell'App
         if (!successCreaDir)
-            fileSalvataggio = new File(context.getFilesDir(), "pippo.txt");
+            fileSalvataggio = new File(context.getFilesDir(), filenameGiornaliero);
         else
-            fileSalvataggio = new File(sd,"pippo.txt" );
+            fileSalvataggio = new File(sd,filenameGiornaliero );
 
         if (!fileSalvataggio.exists()) {
             try {
@@ -149,7 +197,7 @@ public class ApplicationSettings {
         fileSalvataggio.setReadable(true,false);
 
 
-        // LEggo le shared_prefs impostate dall'activity SettingsActivity.java
+        // Leggo le shared_prefs impostate dall'activity SettingsActivity.java
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         minDistanceLocationUpdate=Float.valueOf (sp.getString("sync_space","10"));
         minTimeLocationUpdate=Long.valueOf (sp.getString("sync_frequency","30"));

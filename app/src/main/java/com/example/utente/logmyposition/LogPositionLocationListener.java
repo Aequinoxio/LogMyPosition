@@ -18,6 +18,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by utente on 15/08/2015.
@@ -106,6 +110,15 @@ public class LogPositionLocationListener implements LocationListener {
     private void salvaDati(Location location) {
         // TODO: usare un file temp e salvare in formato GPX
 
+        // TODO: metodo grezzo da migliorare
+        // Tracciato
+        /*
+            UUID_Sessione;contatore; data locale;tempo_GPS;latitudine;longitudine;altitudine;velocità;orientamento; accuratezza
+         */
+        // Salvo la data corrente
+        Date date= new Date();
+        SimpleDateFormat ft = new SimpleDateFormat ("EEE yyyy.MM.dd - HH:mm:ss ZZZZ", Locale.getDefault());
+
         File dataFile = ApplicationSettings.getfileSalvataggio();
         FileOutputStream fileOutputStream = null;
         try {
@@ -116,7 +129,20 @@ public class LogPositionLocationListener implements LocationListener {
             fnfe.printStackTrace();
         }
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
+
+        // UUID sessione
+        sb.append(ApplicationSettings.getSessione().toString());
+        sb.append(";");
+
+        // Contatore punti salvati
+        sb.append(ApplicationSettings.getPuntiSalvati());
+        sb.append(";");
+
+        // Data attuale
+        sb.append(ft.format(date));
+        sb.append(";");
+
         sb.append(location.getTime());
         sb.append(";");
 
@@ -144,9 +170,12 @@ public class LogPositionLocationListener implements LocationListener {
 
         try {
             fileOutputStream.write(sb.toString().getBytes());
+            ApplicationSettings.incrementaPuntiSalvati();
         } catch (NullPointerException | IOException e) {
             // Non dovrei mai arrivarci a meno di cose strane sul telefono
             e.printStackTrace();
+        } finally {
+
         }
     }
 

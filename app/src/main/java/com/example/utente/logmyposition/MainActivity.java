@@ -13,11 +13,14 @@ import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -51,9 +54,11 @@ public class MainActivity extends AppCompatActivity {
             dir=intent.getFloatExtra("direzione",0);
             acc=intent.getFloatExtra("accuratezza", 0);
 
-            tempo=intent.getLongExtra("tempo",0);
+            tempo=intent.getLongExtra("tempo", 0);
 
             aggiornaValoriStatoGPS();
+
+            aggiornaInterfaccia();
 
             Log.e("receiver", "Messaggio ricevuto");
         }
@@ -64,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             // Aggiorno l'interfaccia
-            impostaInterfaccia();
+            aggiornaInterfaccia();
         }
     };
 
@@ -95,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
-        impostaInterfaccia();
+        aggiornaInterfaccia();
     }
 
     @Override
@@ -125,12 +130,18 @@ public class MainActivity extends AppCompatActivity {
 
     public void startStopLogService(View v) {
         ToggleButton serviceStartButton = (ToggleButton) findViewById(R.id.btnStartStopService);
-        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBarServiceRunning);
+        ProgressBar progressBar = (RatingBar) findViewById(R.id.progressBarServiceRunning);
         TextView textView = (TextView) findViewById(R.id.txtStatoLogging);
 
         // Verifico lo stato pre attivazione
         boolean servizioAvviato = ApplicationSettings.isServiceEnabled();
+
+        // Avvio il servizio
         if (!servizioAvviato) {
+            // Ad ogni nuovo avvio resetto i punti e geneno un nuovo ID di sessione
+            // Utile per tenere traccia dei vari segmenti
+            ApplicationSettings.generaSessione();
+            ApplicationSettings.resetPuntiSalvati();
             startService(new Intent(this, LogPositionService.class));
         } else{
             stopService(new Intent(this, LogPositionService.class));
@@ -157,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume(){
         super.onResume();
-        impostaInterfaccia();
+        aggiornaInterfaccia();
 
         // Un po' sporca ma efficace
         // Recupero l'ultima posizione memorizzata accedendo a variabili protected
@@ -207,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
 
         Log.e(this.getClass().getSimpleName(),"Distrutta");
     }
-    private void impostaInterfaccia() {
+    private void aggiornaInterfaccia() {
         ApplicationSettings.loadPreferences(getApplicationContext());
 
         TextView textView = (TextView) findViewById(R.id.txtStatoLogging);
@@ -235,15 +246,27 @@ public class MainActivity extends AppCompatActivity {
         if (f.exists()){
             textView = (TextView) findViewById(R.id.txtLogFileName);
             textView.setText(f.getAbsolutePath());
-//            textView.setText( Html.fromHtml("<a href=\"file://"+f.getAbsolutePath()+"\">"+f.getAbsolutePath() +"</a>"));
+//            textView.setText( Html.fromHtml("<a href=\"content://" + f.getAbsolutePath() + "\">" + f.getAbsolutePath() + "</a>"));
 //            textView.setMovementMethod(LinkMovementMethod.getInstance());
         }
 
         // TODO: solo per testare le settings preferences class
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        String s = sp.getString("notifications_new_message_ringtone","");
 
+        String s = sp.getString("sync_frequency","");
+        textView = (TextView) findViewById(R.id.valPollingTime);
+        textView.setText(s);
+
+        s = sp.getString("sync_space","");
+        textView = (TextView) findViewById(R.id.valPollingSpace);
+        textView.setText(s);
+
+        s=Integer.toString(ApplicationSettings.getSatelliti());
         textView = (TextView) findViewById(R.id.valNumSat);
+        textView.setText(s);
+
+        s=Long.toString(ApplicationSettings.getPuntiSalvati());
+        textView = (TextView) findViewById(R.id.valPuntiSalvati);
         textView.setText(s);
     }
 
@@ -264,7 +287,6 @@ public class MainActivity extends AppCompatActivity {
         textView.setText(String.format("%f",acc));
         textView = (TextView) findViewById(R.id.valTempo);
         textView.setText(String.format("%d",tempo));
-
     }
 
     ///////////////// Gestione comunicazione con il servizio

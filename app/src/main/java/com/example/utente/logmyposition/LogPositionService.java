@@ -77,7 +77,7 @@ public class LogPositionService extends Service implements GpsStatus.Listener {
             case GpsStatus.GPS_EVENT_STARTED : s="GPS_EVENT_STARTED"; ApplicationSettings.setGPSAvailable(true); break;
             case GpsStatus.GPS_EVENT_STOPPED : s="GPS_EVENT_STOPPED"; ApplicationSettings.setGPSAvailable(false); break;
             case GpsStatus.GPS_EVENT_SATELLITE_STATUS : s="GPS_EVENT_SATELLITE_STATUS";
-                calcolaNumeroSatelliti();
+                ApplicationSettings.setSatelliti(calcolaNumeroSatelliti());
                 break;
         }
         Log.e(getClass().getSimpleName(), "Evento GPS Cambiato:"+s);
@@ -144,6 +144,7 @@ public class LogPositionService extends Service implements GpsStatus.Listener {
 
         avviaServizio();
 
+        // Aggiorno l'interfaccia se è attiva
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageFromListenerReceiver,
                 new IntentFilter("AggiornaInterfaccia"));
 
@@ -255,6 +256,8 @@ public class LogPositionService extends Service implements GpsStatus.Listener {
             }
         };
         timer = new Timer();
+
+        // TODO: Costante cablata per la temporizzazione
         timer.schedule(timerTask, 0, 5000);
     }
 
@@ -278,70 +281,11 @@ public class LogPositionService extends Service implements GpsStatus.Listener {
         ApplicationSettings.setStatoServizio(true);
         ApplicationSettings.setGPSAvailable(locationManager.isProviderEnabled("gps"));
 
-        // Imposta attività temporizzata (per DEBUG
         impostaAttivitaTemporizzata();
+
         // Display a notification about us starting.  We put an icon in the status bar.
         showNotification();
-/*
-        // Se è tutto ok attivo il provider
-        if ((locationProvider != null) && (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))) {
-            locationListener = new LogPositionLocationListener(getApplicationContext());
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                    ApplicationSettings.getMinTimeLocationUpdate(),
-                    ApplicationSettings.getMinDistanceLocationUpdate()
-                    , locationListener);
-            servizioAvviato=true;
-            ApplicationSettings.setStatoServizio(true);
-
-
-            // Imposta attività temporizzata (per DEBUG
-            impostaAttivitaTemporizzata();
-            // Display a notification about us starting.  We put an icon in the status bar.
-            showNotification();
-
-        } else {
-            locationManager=null;
-            locationProvider=null;
-            locationListener=null;
-            // Visualizzo un messaggio come feedback in caso il GPS non sia attivo
-            Toast myToast = Toast.makeText(getApplicationContext(),
-                    this.getString(R.string.noGPSInfo) + "\n",
-                    Toast.LENGTH_LONG);
-            myToast.show();
-            servizioAvviato=false;
-            ApplicationSettings.setStatoServizio(false);
-        }
-        */
 
         aggiornaMainActivity();
     }
-/*
-    // see https://androidcookbook.com/Recipe.seam?recipeId=1229
-    private void setMockLocation(double latitude, double longitude, float accuracy) {
-        locationManager.addTestProvider(LocationManager.GPS_PROVIDER,
-                "requiresNetwork" == "",
-                "requiresSatellite" == "",
-                "requiresCell" == "",
-                "hasMonetaryCost" == "",
-                "supportsAltitude" == "",
-                "supportsSpeed" == "",
-                "supportsBearing" == "",
-                android.location.Criteria.POWER_LOW,
-                android.location.Criteria.ACCURACY_FINE);
-
-        Location newLocation = new Location(LocationManager.GPS_PROVIDER);
-
-        newLocation.setLatitude(latitude);
-        newLocation.setLongitude(longitude);
-        newLocation.setAccuracy(accuracy);
-
-        locationManager.setTestProviderEnabled(LocationManager.GPS_PROVIDER, true);
-
-        locationManager.setTestProviderStatus(LocationManager.GPS_PROVIDER,
-                LocationProvider.AVAILABLE,
-                null, System.currentTimeMillis());
-
-        locationManager.setTestProviderLocation(LocationManager.GPS_PROVIDER, newLocation);
-    }
-    */
 }
