@@ -156,6 +156,8 @@ public class ApplicationSettings {
 
         Date date= new Date();
         SimpleDateFormat ft = new SimpleDateFormat ("yyyyMMdd", Locale.getDefault());
+
+        // TODO: Costante estensione cablata
         String filenameGiornaliero=ft.format(date)+".txt";
 
         try {
@@ -199,6 +201,8 @@ public class ApplicationSettings {
 
         // Leggo le shared_prefs impostate dall'activity SettingsActivity.java
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+
+        // TODO: Costanti di default cablate
         minDistanceLocationUpdate=Float.valueOf (sp.getString("sync_space","10"));
         minTimeLocationUpdate=Long.valueOf (sp.getString("sync_frequency","30"));
     }

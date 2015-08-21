@@ -128,12 +128,24 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Listener per mostrare il log file
+     * @param v
+     */
+    public void showLogFile(View v){
+        Intent intent = new Intent(getApplicationContext(), ShowLogFileContent.class);
+        startActivity(intent);
+    }
+    /**
+     * Listener per avviare e fermare il servizio. Collegato al togglebutton btnStartStopService
+     * @param v
+     */
     public void startStopLogService(View v) {
         ToggleButton serviceStartButton = (ToggleButton) findViewById(R.id.btnStartStopService);
         ProgressBar progressBar = (RatingBar) findViewById(R.id.progressBarServiceRunning);
         TextView textView = (TextView) findViewById(R.id.txtStatoLogging);
 
-        // Verifico lo stato pre attivazione
+        // Verifico lo stato pre attivazione del servizio
         boolean servizioAvviato = ApplicationSettings.isServiceEnabled();
 
         // Avvio il servizio
@@ -225,7 +237,9 @@ public class MainActivity extends AppCompatActivity {
         textView.setText(ApplicationUtility.getServiceStatusTextLabel(getApplicationContext(), ApplicationSettings.isServiceEnabled()));
 
         textView = (TextView) findViewById(R.id.valNumSat);
-        textView.setText(String.format("%d", ApplicationSettings.getSatelliti()));
+        textView.setText(
+                String.format("%d / %d", ApplicationSettings.getSatelliti(),ApplicationSettings.getMaxSatelliti())
+        );
 
         textView=(TextView)findViewById(R.id.txtStatoGPS);
         textView.setText(ApplicationUtility.getServiceStatusTextLabel(getApplicationContext(), locationManager.isProviderEnabled("gps")));
@@ -246,6 +260,11 @@ public class MainActivity extends AppCompatActivity {
         if (f.exists()){
             textView = (TextView) findViewById(R.id.txtLogFileName);
             textView.setText(f.getAbsolutePath());
+
+            // TODO: Costanti di unità di misura cablate. Farle scegliere all'utente
+            textView = (TextView) findViewById(R.id.valFileSize);
+            textView.setText(Long.toString(f.length())+" bytes");
+
 //            textView.setText( Html.fromHtml("<a href=\"content://" + f.getAbsolutePath() + "\">" + f.getAbsolutePath() + "</a>"));
 //            textView.setMovementMethod(LinkMovementMethod.getInstance());
         }
@@ -261,9 +280,9 @@ public class MainActivity extends AppCompatActivity {
         textView = (TextView) findViewById(R.id.valPollingSpace);
         textView.setText(s);
 
-        s=Integer.toString(ApplicationSettings.getSatelliti());
-        textView = (TextView) findViewById(R.id.valNumSat);
-        textView.setText(s);
+//        s=Integer.toString(ApplicationSettings.getSatelliti());
+//        textView = (TextView) findViewById(R.id.valNumSat);
+//        textView.setText(s);
 
         s=Long.toString(ApplicationSettings.getPuntiSalvati());
         textView = (TextView) findViewById(R.id.valPuntiSalvati);

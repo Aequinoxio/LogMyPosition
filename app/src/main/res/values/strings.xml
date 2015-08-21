@@ -31,4 +31,9 @@
     <string name="txtPollingSpace">Polling Space</string>
     <string name="txtPuntiSalvati">Punti salvati</string>
     <string name="txtFileName">File salvato</string>
+
+    <string name="title_activity_show_log_file">ShowLogFile</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_show_log_file_content">ShowLogFileContent</string>
 </resources>

@@ -173,6 +173,7 @@ public class LogPositionService extends Service implements GpsStatus.Listener {
 
             // Deregistro il listener per la posizione
             locationManager.removeUpdates(locationListener);
+            locationManager.removeGpsStatusListener(this);
 
             // Rimuovo il timer
             timer.cancel();
@@ -242,9 +243,10 @@ public class LogPositionService extends Service implements GpsStatus.Listener {
         final Iterator<GpsSatellite> it = gs.getSatellites().iterator();
         while (it.hasNext()) {
             it.next();
-            i ++;
+            i++;
         }
-        ApplicationSettings.setSatelliti(i);
+        ApplicationSettings.setSatelliti(i,gs.getMaxSatellites());
+
         return i;
     }
     private void impostaAttivitaTemporizzata(){
@@ -268,6 +270,8 @@ public class LogPositionService extends Service implements GpsStatus.Listener {
         }
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        locationManager.addGpsStatusListener(this);
+
         locationProvider = locationManager.getProvider(LocationManager.GPS_PROVIDER);
 
 
