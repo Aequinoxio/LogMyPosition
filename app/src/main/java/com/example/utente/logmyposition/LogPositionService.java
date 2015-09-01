@@ -148,6 +148,11 @@ public class LogPositionService extends Service implements GpsStatus.Listener {
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageFromListenerReceiver,
                 new IntentFilter("AggiornaInterfaccia"));
 
+//        // TODEL X TESTARE ACRA
+//        String s=null;
+//        s.toString();
+//        ///////////////////////
+
         return START_STICKY;
     }
 
