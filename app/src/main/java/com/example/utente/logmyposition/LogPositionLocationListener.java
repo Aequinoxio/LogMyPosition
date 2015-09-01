@@ -54,30 +54,43 @@ public class LogPositionLocationListener implements LocationListener {
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-        Log.e(getClass().getSimpleName(),"Cambio di stato");
+        Log.e(getClass().getSimpleName(), "Cambio di stato");
     }
 
     @Override
     public void onProviderEnabled(String provider) {
         Log.e(getClass().getSimpleName(), provider+" - Provider abilitato");
-        ApplicationSettings.setGPSAvailable(true);
-
-        // Aggiorno tutte le componenti impostate su questo intent filter
-        Intent intent=new Intent("AggiornaInterfaccia");
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        aggiornaStato(true);
+//        ApplicationSettings.setGPSAvailable(true);
+//
+//        // Aggiorno tutte le componenti impostate su questo intent filter
+//        Intent intent=new Intent("AggiornaInterfaccia");
+//        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
     @Override
     public void onProviderDisabled(String provider) {
         Log.e(getClass().getSimpleName(),provider+" - Provider disabilitato");
+        aggiornaStato(false);
+//        ApplicationSettings.setGPSAvailable(false);
+//
+//        // Aggiorno tutte le componenti impostate su questo intent filter
+//        Intent intent=new Intent("AggiornaInterfaccia");
+//        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+
+    /**
+     * Aggiorna lo stato del GPS nell'applicazione ed invia i broadcast per aggiornare il resto dell'interfaccia
+     * @param stato
+     */
+    private void aggiornaStato(boolean stato){
         ApplicationSettings.setGPSAvailable(false);
 
         // Aggiorno tutte le componenti impostate su questo intent filter
         Intent intent=new Intent("AggiornaInterfaccia");
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+
     }
-
-
     /**
      * Aggiorno la main activity
      *
@@ -170,11 +183,16 @@ public class LogPositionLocationListener implements LocationListener {
 
         try {
             fileOutputStream.write(sb.toString().getBytes());
+            fileOutputStream.close();
             ApplicationSettings.incrementaPuntiSalvati();
-        } catch (NullPointerException | IOException e) {
-            // Non dovrei mai arrivarci a meno di cose strane sul telefono
+        } catch (NullPointerException e) {
+            // Non dovrei mai arrivarci a meno di cose strane fatte sul telefono come root
             e.printStackTrace();
-        } finally {
+        } catch (IOException ioe){
+            // Non dovrei mai arrivarci a meno di cose strane fatte sul telefono come root
+            ioe.printStackTrace();
+        }
+        finally {
 
         }
     }

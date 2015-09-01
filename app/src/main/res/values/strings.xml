@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">LogMyPosition</string>
+    <string name="crash_report">Crash rilevato, preparo il report</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Impostazioni</string>

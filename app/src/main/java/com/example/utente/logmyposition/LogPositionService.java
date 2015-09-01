@@ -163,22 +163,18 @@ public class LogPositionService extends Service implements GpsStatus.Listener {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageFromListenerReceiver);
 
         // Salvo lo stato dell'applicazione
-       // if (servizioAvviato=true) {
-            // Cancel the persistent notification.
-            //mNM.cancel(ApplicationSettings.getNotificationID());
-            mNM.cancel(NOTIFICATION);
-            servizioAvviato = false;
-            ApplicationSettings.setStatoServizio(false);
-            ApplicationSettings.savePreferences(getApplicationContext());
+        mNM.cancel(NOTIFICATION);
+        servizioAvviato = false;
+        ApplicationSettings.setStatoServizio(false);
+        ApplicationSettings.savePreferences(getApplicationContext());
 
-            // Deregistro il listener per la posizione
-            locationManager.removeUpdates(locationListener);
-            locationManager.removeGpsStatusListener(this);
+        // Deregistro il listener per la posizione
+        locationManager.removeUpdates(locationListener);
+        locationManager.removeGpsStatusListener(this);
 
-            // Rimuovo il timer
-            timer.cancel();
-            timer = null;
-       // }
+        // Rimuovo il timer
+        timer.cancel();
+        timer = null;
     }
 
     @Override
