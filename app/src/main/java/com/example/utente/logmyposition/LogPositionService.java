@@ -18,12 +18,15 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Debug;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
+
+import org.acra.ACRA;
 
 import java.util.Iterator;
 import java.util.Timer;
@@ -47,12 +50,29 @@ public class LogPositionService extends Service implements GpsStatus.Listener {
     private LocationProvider locationProvider;
     private LogPositionLocationListener locationListener;
 
-    // Receiver per aggiornare la parte dell'interfacci di competenza del servizio (es. notifica)
+    // I singleton in Android possono essere deallocati se l'activity è chiusa dal S.O.
+    ApplicationSettings applicationSettings = ApplicationSettings.getInstance();
+
+    // Receiver per aggiornare la parte dell'interfaccia di competenza del servizio (es. notifica)
+    // Filtro AgiornaInterfaccia
     private BroadcastReceiver mMessageFromListenerReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             // Aggiorno l'interfaccia
             showNotification();
+        }
+    };
+
+    // Receiver per aggiornare i parametri se sono stati cambiati dalle preferenze
+    // Filtro AggiornaParametri
+    private BroadcastReceiver mMessageFromListenerReceiverPreferencesChanged = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Aggiorno i parametri se sono stati modificati durante l'esecusione del servizio
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                    applicationSettings.getMinTimeLocationUpdate(),
+                    applicationSettings.getMinDistanceLocationUpdate()
+                    , locationListener);
         }
     };
 
@@ -74,10 +94,10 @@ public class LogPositionService extends Service implements GpsStatus.Listener {
         String s="";
         switch (event){
             case GpsStatus.GPS_EVENT_FIRST_FIX : s="GPS_EVENT_FIRST_FIX"; break;
-            case GpsStatus.GPS_EVENT_STARTED : s="GPS_EVENT_STARTED"; ApplicationSettings.setGPSAvailable(true); break;
-            case GpsStatus.GPS_EVENT_STOPPED : s="GPS_EVENT_STOPPED"; ApplicationSettings.setGPSAvailable(false); break;
+            case GpsStatus.GPS_EVENT_STARTED : s="GPS_EVENT_STARTED"; applicationSettings.setGPSAvailable(true); break;
+            case GpsStatus.GPS_EVENT_STOPPED : s="GPS_EVENT_STOPPED"; applicationSettings.setGPSAvailable(false); break;
             case GpsStatus.GPS_EVENT_SATELLITE_STATUS : s="GPS_EVENT_SATELLITE_STATUS";
-                ApplicationSettings.setSatelliti(calcolaNumeroSatelliti());
+                applicationSettings.setSatelliti(calcolaNumeroSatelliti());
                 break;
         }
         Log.e(getClass().getSimpleName(), "Evento GPS Cambiato:"+s);
@@ -126,6 +146,10 @@ public class LogPositionService extends Service implements GpsStatus.Listener {
 
         // Imposto una notifica se avvio il servizio
         mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        // Salvo alcune variabili per debug
+        ACRA.getErrorReporter().putCustomData("Event at " + System.currentTimeMillis()+ " -> "+ Thread.currentThread().getStackTrace()[2].getClassName().replace(".","_"),
+                Thread.currentThread().getStackTrace()[2].getMethodName());
     }
 
     /**
@@ -148,6 +172,10 @@ public class LogPositionService extends Service implements GpsStatus.Listener {
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageFromListenerReceiver,
                 new IntentFilter("AggiornaInterfaccia"));
 
+        // Aggiorno i parametri dipendenti dalle preferenze
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageFromListenerReceiverPreferencesChanged,
+                new IntentFilter("AggiornaParametri"));
+
 //        // TODEL X TESTARE ACRA
 //        String s=null;
 //        s.toString();
@@ -165,13 +193,18 @@ public class LogPositionService extends Service implements GpsStatus.Listener {
         super.onDestroy();
         Log.e(getClass().getSimpleName(), "Distrutto");
 
+        // Salvo alcune variabili per debug
+        ACRA.getErrorReporter().putCustomData("Event at " + System.currentTimeMillis()+ " -> "+ Thread.currentThread().getStackTrace()[2].getClassName().replace(".","_"),
+                Thread.currentThread().getStackTrace()[2].getMethodName());
+
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageFromListenerReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageFromListenerReceiverPreferencesChanged);
 
         // Salvo lo stato dell'applicazione
         mNM.cancel(NOTIFICATION);
         servizioAvviato = false;
-        ApplicationSettings.setStatoServizio(false);
-        ApplicationSettings.savePreferences(getApplicationContext());
+        applicationSettings.setStatoServizio(false);
+        applicationSettings.savePreferences(getApplicationContext());
 
         // Deregistro il listener per la posizione
         locationManager.removeUpdates(locationListener);
@@ -185,13 +218,38 @@ public class LogPositionService extends Service implements GpsStatus.Listener {
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-        ApplicationSettings.savePreferences(getApplicationContext());
+
+        // Salvo alcune variabili per debug
+        ACRA.getErrorReporter().putCustomData("Event at " + System.currentTimeMillis()+ " -> "+ Thread.currentThread().getStackTrace()[2].getClassName().replace(".","_"),
+                Thread.currentThread().getStackTrace()[2].getMethodName());
+
+        applicationSettings.savePreferences(getApplicationContext());
         Log.e("Servizio", "Poca memoria");
     }
 
+    @Override
+    public void onTrimMemory(int level){
+        super.onTrimMemory(level);
+
+        // Salvo alcune variabili per debug
+        ACRA.getErrorReporter().putCustomData("Event at " + System.currentTimeMillis()+ " -> "+ Thread.currentThread().getStackTrace()[2].getClassName().replace(".","_"),
+                Thread.currentThread().getStackTrace()[2].getMethodName());
+    }
+
+    @Override
+    public void onTaskRemoved(Intent intent){
+        super.onTaskRemoved(intent);
+
+        // Salvo alcune variabili per debug
+        ACRA.getErrorReporter().putCustomData("Event at " + System.currentTimeMillis()+ " -> "+ Thread.currentThread().getStackTrace()[2].getClassName().replace(".","_"),
+                Thread.currentThread().getStackTrace()[2].getMethodName());
+
+    }
+
+
     private void eseguiCompito() {
         Log.e(getClass().getSimpleName(), "running");
-        if (BuildConfig.DEBUG){
+        if (BuildConfig.DEBUG  && ApplicationSettings.MOCKLOCATION){
             double la=Math.random()*60;
             double lo=Math.random()*20;
             mock.pushLocation(la,lo);
@@ -211,7 +269,7 @@ public class LogPositionService extends Service implements GpsStatus.Listener {
                 R.string.local_service_started : R.string.local_service_disconnected
         );
 
-        text+=(ApplicationSettings.isGPSAvailable()?" (GPS Abilitato)":" (GPS Disabilitato)");
+        text+=(applicationSettings.isGPSAvailable()?" (GPS Abilitato)":" (GPS Disabilitato)");
 
         // Set the icon, scrolling text and timestamp
         Notification notification = new Notification(R.drawable.ic_main_w, text,
@@ -246,7 +304,7 @@ public class LogPositionService extends Service implements GpsStatus.Listener {
             it.next();
             i++;
         }
-        ApplicationSettings.setSatelliti(i,gs.getMaxSatellites());
+        applicationSettings.setSatelliti(i,gs.getMaxSatellites());
 
         return i;
     }
@@ -265,7 +323,7 @@ public class LogPositionService extends Service implements GpsStatus.Listener {
     }
 
     private void avviaServizio(){
-        if (BuildConfig.DEBUG){
+        if (BuildConfig.DEBUG && ApplicationSettings.MOCKLOCATION){
             mock = new MockLocationProvider(
                     LocationManager.GPS_PROVIDER, getApplicationContext());
         }
@@ -275,16 +333,15 @@ public class LogPositionService extends Service implements GpsStatus.Listener {
 
         locationProvider = locationManager.getProvider(LocationManager.GPS_PROVIDER);
 
-
         locationListener = new LogPositionLocationListener(getApplicationContext());
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                ApplicationSettings.getMinTimeLocationUpdate(),
-                ApplicationSettings.getMinDistanceLocationUpdate()
+                applicationSettings.getMinTimeLocationUpdate(),
+                applicationSettings.getMinDistanceLocationUpdate()
                 , locationListener);
 
         servizioAvviato=true;
-        ApplicationSettings.setStatoServizio(true);
-        ApplicationSettings.setGPSAvailable(locationManager.isProviderEnabled("gps"));
+        applicationSettings.setStatoServizio(true);
+        applicationSettings.setGPSAvailable(locationManager.isProviderEnabled("gps"));
 
         impostaAttivitaTemporizzata();
 

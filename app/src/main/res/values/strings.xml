@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LogMyPosition</string>
+    <string name="app_name">Log my position</string>
     <string name="crash_report">Crash rilevato, preparo il report</string>
 
     <string name="hello_world">Hello world!</string>
@@ -14,27 +14,28 @@
     <string name="startServiceButtonText">Inizia log</string>
     <string name="btnGoInBackground"><![CDATA[Background & esci]]></string>
     <string name="noGPSInfo">Gps non attivo o non disponibile per l\'applicazione\nNon mi attivo</string>
-    <string name="lblLongitudine">long</string>
-    <string name="lblLatitudine">Lat</string>
-    <string name="lblAltitudine">Alt</string>
-    <string name="lblVelocita">Vel</string>
+    <string name="lblLongitudine">Longitudine</string>
+    <string name="lblLatitudine">Latitudine</string>
+    <string name="lblAltitudine">Altitudine</string>
+    <string name="lblVelocita">Velocità</string>
     <string name="lblTempo">Tempo</string>
-    <string name="lblBussola">Buss</string>
-    <string name="lblAccuratezza">Acc</string>
+    <string name="lblBussola">Orientamento</string>
+    <string name="lblAccuratezza">Accuratezza</string>
     <string name="local_service_started">Servizio di registrazione avviato</string>
     <string name="local_service_stopped">Servizio fermato</string>
     <string name="local_service_label">Log my position</string>
     <string name="local_service_connected">Connesso al servizio</string>
     <string name="local_service_disconnected">Disconnesso dal servizio</string>
     <string name="lblStatoGPS">Stato GPS</string>
-    <string name="txtNumeroSatelliti">Numero satelliti</string>
+    <string name="txtNumeroSatelliti">Satelliti</string>
     <string name="txtPollingTime">Polling time</string>
     <string name="txtPollingSpace">Polling Space</string>
     <string name="txtPuntiSalvati">Punti salvati</string>
-    <string name="txtFileName">File salvato</string>
+    <string name="txtFileName">Nome del file salvato</string>
 
-    <string name="title_activity_show_log_file">ShowLogFile</string>
+    <string name="title_activity_show_log_file">Visualizzazione file log</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="title_activity_show_log_file_content">ShowLogFileContent</string>
+    <string name="txtFileSize">Dim. file</string>
 </resources>

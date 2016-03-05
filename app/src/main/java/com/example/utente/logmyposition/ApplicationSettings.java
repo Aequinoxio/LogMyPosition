@@ -8,6 +8,8 @@ import android.os.NetworkOnMainThreadException;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import org.acra.ACRA;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -26,57 +28,65 @@ public class ApplicationSettings {
     private static ApplicationSettings MYSELF=null ;
     private static Context context;
 
-    private final static String PREFNAME="LogMyPosition";
-    private final static String STATOSERVIZIO="STATOSERVIZIO";
-    private final static String STATOFILESALVATAGGIO="STATOFILESALVATAGGIO";
+    private final  String PREFNAME="LogMyPosition";
+    private final  String STATOSERVIZIO="STATOSERVIZIO";
+    private final  String STATOFILESALVATAGGIO="STATOFILESALVATAGGIO";
+
+    public static final boolean MOCKLOCATION=false;
 
     /*
     // Id per trattare la notifica
     private static final int NOTIFICATION = R.string.local_service_started;
 */
 
-    private static SharedPreferences sharedPreferences=null;
-    private static SharedPreferences.Editor editor=null;
+    private  SharedPreferences sharedPreferences=null;
+    private  SharedPreferences.Editor editor=null;
 
-    private static boolean servizioLogAttivato=false;
-    private static boolean GPSAvailable =false;
-    private static File fileSalvataggio=null;
-    private static long minTimeLocationUpdate=1000;        // 1 minuto per default tra un aggiornamento e l'altro
-    private static float minDistanceLocationUpdate = 10.0f; // 10 metri per default tra un aggiornamento e l'altro
+    private  boolean servizioLogAttivato=false;
+    private  boolean GPSAvailable =false;
+    private  File fileSalvataggio=null;
+    private  long minTimeLocationUpdate=1000;        // 1 minuto per default tra un aggiornamento e l'altro
+    private  float minDistanceLocationUpdate = 10.0f; // 10 metri per default tra un aggiornamento e l'altro
 
-    private static int maxSatelliti=0;
-    private static int numSatelliti=0;
+    private  int maxSatelliti=0;
+    private  int numSatelliti=0;
 
-    private static long puntiSalvati=0;
+    private  long puntiSalvati=0;
 
     // Imposto comunque una UUID
-    private static UUID sessione=generaSessione();
+    private  UUID sessione=generaSessione();
 
     /**
      * Costruttore privato per il pattern Singleton
      */
-    private ApplicationSettings(){}
+    private ApplicationSettings(){
+        // Salvo alcune variabili per debug
+        ACRA.getErrorReporter().putCustomData("Event at " + System.currentTimeMillis() + " -> " + Thread.currentThread().getStackTrace()[2].getClassName().replace(".", "_"),
+                Thread.currentThread().getStackTrace()[2].getMethodName());
+    }
 
-//    /**
-//     * Ritorna l'ID dela notifica unico per tutta l'applicazione
-//     * @return
-//     */
-//    public static int getNotificationID(){return NOTIFICATION;}
+    /**
+     * Imposto il distruttore per cercare di capire come mai viene distrutta la variabile FILE
+     */
+    protected void finalize(){
+        // Salvo alcune variabili per debug
+        ACRA.getErrorReporter().putCustomData("Event at " + System.currentTimeMillis() + " -> " + Thread.currentThread().getStackTrace()[2].getClassName().replace(".", "_"),
+                Thread.currentThread().getStackTrace()[2].getMethodName());
+    }
 
     /**
      * imposta il numero dei satelliti rilevati
      * @param num
      */
-    public static void setSatelliti(int num){
+    public  void setSatelliti(int num){
         setSatelliti(num, maxSatelliti);
     }
-
 
     /**
      * Genera una sessione randomica
      * @return UUID generato
      */
-    public static UUID generaSessione(){
+    public UUID generaSessione(){
         sessione=UUID.randomUUID();
         return sessione;
     }
@@ -85,31 +95,31 @@ public class ApplicationSettings {
      * Ritorna la sessione generata
      * @return
      */
-    public static UUID getSessione(){return sessione;}
+    public UUID getSessione(){return sessione;}
 
     /**
      * Resetta il numero di punti salvati
      */
-    public static void resetPuntiSalvati(){puntiSalvati=0;}
+    public void resetPuntiSalvati(){puntiSalvati=0;}
 
     /**
      * Incrementa di uno il numero di punti salvati e li ritorna
      * @return
      */
-    public static long incrementaPuntiSalvati(){puntiSalvati++; return puntiSalvati;}
+    public long incrementaPuntiSalvati(){puntiSalvati++; return puntiSalvati;}
 
     /**
      * Ritorna il numero di punti salvati
      * @return
      */
-    public static long getPuntiSalvati(){return puntiSalvati;}
+    public long getPuntiSalvati(){return puntiSalvati;}
 
     /**
      * imposta il numero dei satelliti rilevati ed il massimo rilevato
      * @param num
      * @param max
      */
-    public static void setSatelliti (int num, int max){
+    public void setSatelliti (int num, int max){
         maxSatelliti=max;
         numSatelliti=num;
     }
@@ -118,30 +128,40 @@ public class ApplicationSettings {
      * Ritorna il numero dei satelliti rilevati
      * @return
      */
-    public static int getSatelliti(){return numSatelliti;}
+    public int getSatelliti(){return numSatelliti;}
 
     /**
      * ritorna il massimo del numero dei satelliti rilevati
      * @return
      */
-    public static int getMaxSatelliti(){return maxSatelliti;}
+    public int getMaxSatelliti(){return maxSatelliti;}
 
-    public static boolean isGPSAvailable(){return GPSAvailable ;}
-    public static void setGPSAvailable(boolean stato){GPSAvailable =stato;}
+    public boolean isGPSAvailable(){return GPSAvailable ;}
+    public void setGPSAvailable(boolean stato){GPSAvailable =stato;}
 
-    public static boolean isServiceEnabled(){return servizioLogAttivato;}
+    public boolean isServiceEnabled(){return servizioLogAttivato;}
 
-    public static void setStatoServizio(boolean stato){
+    public void setStatoServizio(boolean stato){
         servizioLogAttivato=stato;
     }
 
-    public static long getMinTimeLocationUpdate(){return minTimeLocationUpdate;}
+    public long getMinTimeLocationUpdate(){return minTimeLocationUpdate;}
 
-    public static float getMinDistanceLocationUpdate(){return minDistanceLocationUpdate;}
+    public float getMinDistanceLocationUpdate(){return minDistanceLocationUpdate;}
 
-    public static void savePreferences(Context context){
+    public void savePreferences(Context context){
+
+        // Salvo alcune variabili per debug
+        ACRA.getErrorReporter().putCustomData("Event at " + System.currentTimeMillis(), "ApplicationSettings.savePreferences");
+        ACRA.getErrorReporter().putCustomData("ApplicationSettings - sharedPreferences", (sharedPreferences==null)?"null":sharedPreferences.toString());
+
         sharedPreferences = context.getSharedPreferences(PREFNAME,0);
         editor=sharedPreferences.edit();
+
+        // Salvo alcune variabili per debug
+        ACRA.getErrorReporter().putCustomData("ApplicationSettings - editor", (editor == null) ? "null" : editor.toString());
+        ACRA.getErrorReporter().putCustomData("ApplicationSettings - fileSalvataggio", (fileSalvataggio == null) ? "null" : fileSalvataggio.toString());
+
         synchronized (editor) {
            // editor.putBoolean(STATOSERVIZIO, servizioLogAttivato);
             editor.putString(STATOFILESALVATAGGIO, fileSalvataggio.getAbsolutePath());
@@ -149,29 +169,47 @@ public class ApplicationSettings {
         }
     }
 
-    public static void loadPreferences(Context context){
+    public void loadPreferences(Context context){
         sharedPreferences = context.getSharedPreferences(PREFNAME, 0);
         Map<String, ?> values = null;
         String filePath=null;
 
+        try {
+            values = sharedPreferences.getAll();
+        } catch (NullPointerException npe){
+            Log.e("loadPreferences", "Preferenze non esistenti");
+        }
+
+//        // Prelevo i dati solo se ci sono nelle shared prefs
+//        if (values!=null && values.size()!=0) {
+//            //servizioLogAttivato = (Boolean) values.get(STATOSERVIZIO);
+//            filePath = (String) values.get(STATOFILESALVATAGGIO);
+//        }
+
+        // Leggo le shared_prefs impostate dall'activity SettingsActivity.java
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+
+        // TODO: Costanti di default cablate
+        minDistanceLocationUpdate=Float.valueOf (sp.getString("sync_space","10"));
+        minTimeLocationUpdate=Long.valueOf (sp.getString("sync_frequency","30"));
+    }
+
+    public File getFileSalvataggio(){
+    /* TODO: Workaround per evitare un nullpointer exception quanto adnroid, in sovraccarico e con poca memoria,
+        dealloca e reinizializza il singleton(!!!)
+     */
+        if (fileSalvataggio==null)
+            setFileSalvataggio();
+
+        return fileSalvataggio;
+    }
+
+    public void setFileSalvataggio(){
         Date date= new Date();
         SimpleDateFormat ft = new SimpleDateFormat ("yyyyMMdd", Locale.getDefault());
 
         // TODO: Costante estensione cablata
         String filenameGiornaliero=ft.format(date)+".txt";
-
-        try {
-            values = sharedPreferences.getAll();
-        } catch (NullPointerException npe){
-            Log.e("loadPreferences", "preferenze non esistenti");
-        }
-
-        // Prelevo i dati solo se ci sono nelle shared prefs
-        if (values!=null && values.size()!=0) {
-            //servizioLogAttivato = (Boolean) values.get(STATOSERVIZIO);
-            filePath = (String) values.get(STATOFILESALVATAGGIO);
-        }
-
         // TODO: rendere il file parametrico per es. a livello giornaliero o far scegliere all'utente
         // fileSalvataggio = new File(context.getFilesDir(), "pippo.txt");
         // Creo una dir sulla SD
@@ -193,23 +231,13 @@ public class ApplicationSettings {
             try {
                 fileSalvataggio.createNewFile();
             } catch (IOException ioe) {
-                Log.e("Errore", "Creazione file - " + filePath + " - non riuscita");
+                Log.e("Errore", "Creazione file - " + fileSalvataggio.getAbsolutePath() + " - non riuscita");
             }
         }
         fileSalvataggio.setReadable(true,false);
-
-
-        // Leggo le shared_prefs impostate dall'activity SettingsActivity.java
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-
-        // TODO: Costanti di default cablate
-        minDistanceLocationUpdate=Float.valueOf (sp.getString("sync_space","10"));
-        minTimeLocationUpdate=Long.valueOf (sp.getString("sync_frequency","30"));
     }
 
-    public static File getfileSalvataggio(){return fileSalvataggio;}
-
-    public static ApplicationSettings getInstance(){
+    public static void initInstance(){
         if (MYSELF==null){
             synchronized (ApplicationSettings.class){
                 if (MYSELF==null){
@@ -217,6 +245,20 @@ public class ApplicationSettings {
                 }
             }
         }
+
+        // Salvo alcune variabili per debug
+        ACRA.getErrorReporter().putCustomData("Event at " + System.currentTimeMillis()+ " -> "+ Thread.currentThread().getStackTrace()[2].getClassName().replace(".","_"),
+                Thread.currentThread().getStackTrace()[2].getMethodName());
+    }
+
+    public static ApplicationSettings getInstance(){
+//        if (MYSELF==null){
+//            synchronized (ApplicationSettings.class){
+//                if (MYSELF==null){
+//                    MYSELF=new ApplicationSettings();
+//                }
+//            }
+//        }
         return MYSELF;
     }
 }

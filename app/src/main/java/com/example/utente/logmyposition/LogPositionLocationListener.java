@@ -1,25 +1,21 @@
 package com.example.utente.logmyposition;
 
-import android.app.Application;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import android.content.IntentFilter;
-import android.content.res.Resources;
-import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import org.acra.ACRA;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -36,6 +32,8 @@ public class LogPositionLocationListener implements LocationListener {
     protected static long   tempo=0;
 
     private Context context=null;  // Provo a salvare il contesto quando creo l'oggetto
+
+    private ApplicationSettings applicationSettings = ApplicationSettings.getInstance();
 
     LogPositionLocationListener(Context context){
         this.context=context;
@@ -84,7 +82,7 @@ public class LogPositionLocationListener implements LocationListener {
      * @param stato
      */
     private void aggiornaStato(boolean stato){
-        ApplicationSettings.setGPSAvailable(false);
+        applicationSettings.setGPSAvailable(false);
 
         // Aggiorno tutte le componenti impostate su questo intent filter
         Intent intent=new Intent("AggiornaInterfaccia");
@@ -112,6 +110,7 @@ public class LogPositionLocationListener implements LocationListener {
 
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
+
     /**
      *
      * @param location
@@ -132,7 +131,13 @@ public class LogPositionLocationListener implements LocationListener {
         Date date= new Date();
         SimpleDateFormat ft = new SimpleDateFormat ("EEE yyyy.MM.dd - HH:mm:ss ZZZZ", Locale.getDefault());
 
-        File dataFile = ApplicationSettings.getfileSalvataggio();
+        File dataFile = applicationSettings.getFileSalvataggio();
+
+        // Salvo alcune variabili per debug
+        ACRA.getErrorReporter().putCustomData("Event at " + System.currentTimeMillis()+ " -> "+ Thread.currentThread().getStackTrace()[2].getClassName().replace(".","_"),
+                Thread.currentThread().getStackTrace()[2].getMethodName());
+        ACRA.getErrorReporter().putCustomData("LogPositionLocationListener - dataFile", (dataFile == null) ? "null" : dataFile.toString());
+
         FileOutputStream fileOutputStream = null;
         try {
             fileOutputStream = new FileOutputStream(dataFile.getAbsolutePath(), true);
@@ -145,11 +150,11 @@ public class LogPositionLocationListener implements LocationListener {
         StringBuilder sb = new StringBuilder();
 
         // UUID sessione
-        sb.append(ApplicationSettings.getSessione().toString());
+        sb.append(applicationSettings.getSessione().toString());
         sb.append(";");
 
         // Contatore punti salvati
-        sb.append(ApplicationSettings.getPuntiSalvati());
+        sb.append(applicationSettings.getPuntiSalvati());
         sb.append(";");
 
         // Data attuale
@@ -165,26 +170,33 @@ public class LogPositionLocationListener implements LocationListener {
         sb.append(location.getLongitude());
         sb.append(";");
 
-        // Se location non ha il valore ritorna cominque con 0.0
+        // Se location non ha il valore ritorna comunque con 0.0
         sb.append(location.getAltitude());
         sb.append(";");
 
-        // Se location non ha il valore ritorna cominque con 0.0
+        // Se location non ha il valore ritorna comunque con 0.0
         sb.append(location.getSpeed());
         sb.append(";");
 
-        // Se location non ha il valore ritorna cominque con 0.0
+        // Se location non ha il valore ritorna comunque con 0.0
         sb.append(location.getBearing());
         sb.append(";");
 
-        // Se location non ha il valore ritorna cominque con 0.0
+        // Se location non ha il valore ritorna comunque con 0.0
         sb.append(location.getAccuracy());
+        sb.append(";");
+
+        // Salvo la precisione spazia e e temporale valida al momento della registrazione
+        sb.append(applicationSettings.getMinDistanceLocationUpdate());
+        sb.append(";");
+        sb.append(applicationSettings.getMinTimeLocationUpdate());
+
         sb.append("\n");
 
         try {
             fileOutputStream.write(sb.toString().getBytes());
             fileOutputStream.close();
-            ApplicationSettings.incrementaPuntiSalvati();
+            applicationSettings.incrementaPuntiSalvati();
         } catch (NullPointerException e) {
             // Non dovrei mai arrivarci a meno di cose strane fatte sul telefono come root
             e.printStackTrace();

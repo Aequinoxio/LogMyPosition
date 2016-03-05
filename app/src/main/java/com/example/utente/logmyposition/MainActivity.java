@@ -13,8 +13,6 @@ import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,6 +22,8 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import org.acra.ACRA;
 
 import java.io.File;
 
@@ -40,6 +40,10 @@ public class MainActivity extends AppCompatActivity {
     // Mantengo il collegamneto con il servizio attivato
     private LogPositionService logPositionService=null;
     private boolean mIsBound;
+
+    // N.B. Se android ha bisono di memporia dealloca il singleton
+    ApplicationSettings applicationSettings = ApplicationSettings.getInstance();
+
 
     // handler for received Intents for the "AggiornoMainActivity" event
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
@@ -60,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
             aggiornaInterfaccia();
 
-            Log.e("receiver", "Messaggio ricevuto");
+            Log.e("MainActivity receiver", "Messaggio ricevuto");
         }
     };
 
@@ -88,15 +92,24 @@ public class MainActivity extends AppCompatActivity {
         if(requestCode==SETTINGS_RESULTCODE)
         {
             // Ricarico le preferences
-            ApplicationSettings.loadPreferences(getApplicationContext());
-        }
+            applicationSettings.loadPreferences(getApplicationContext());
 
+            // Aggiorno il servizio sulla base delle preferenze
+            Intent intent = new Intent("AggiornaParametri");
+            LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+        }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+ //       Log.e("***********DEBUG?", BuildConfig.DEBUG ? "SI" : "NO");
+
+        // Salvo alcune variabili per debug
+        ACRA.getErrorReporter().putCustomData("Event at " + System.currentTimeMillis()+ " -> "+ Thread.currentThread().getStackTrace()[2].getClassName().replace(".","_"),
+                Thread.currentThread().getStackTrace()[2].getMethodName());
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
@@ -119,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Intent intentSettings= new Intent(getApplicationContext(),SettingsActivity.class);
+            Intent intentSettings= new Intent(getApplicationContext(),SimpleSettingsActivity.class);
             startActivityForResult(intentSettings, SETTINGS_RESULTCODE);
 
             return true;
@@ -135,6 +148,7 @@ public class MainActivity extends AppCompatActivity {
     public void showLogFile(View v){
         Intent intent = new Intent(getApplicationContext(), ShowLogFileContent.class);
         startActivity(intent);
+
     }
     /**
      * Listener per avviare e fermare il servizio. Collegato al togglebutton btnStartStopService
@@ -146,14 +160,14 @@ public class MainActivity extends AppCompatActivity {
         TextView textView = (TextView) findViewById(R.id.txtStatoLogging);
 
         // Verifico lo stato pre attivazione del servizio
-        boolean servizioAvviato = ApplicationSettings.isServiceEnabled();
+        boolean servizioAvviato = applicationSettings.isServiceEnabled();
 
         // Avvio il servizio
         if (!servizioAvviato) {
-            // Ad ogni nuovo avvio resetto i punti e geneno un nuovo ID di sessione
+            // Ad ogni nuovo avvio resetto i punti e genero un nuovo ID di sessione
             // Utile per tenere traccia dei vari segmenti
-            ApplicationSettings.generaSessione();
-            ApplicationSettings.resetPuntiSalvati();
+            applicationSettings.generaSessione();
+            applicationSettings.resetPuntiSalvati();
             startService(new Intent(this, LogPositionService.class));
         } else{
             stopService(new Intent(this, LogPositionService.class));
@@ -164,28 +178,77 @@ public class MainActivity extends AppCompatActivity {
         progressBar.setVisibility(ApplicationUtility.getServiceStatusProgressVisibility(getApplicationContext(), servizioAvviato));
 
         // Lo stato di attivazione lo imposta il serviziostesso
-        // ApplicationSettings.setStatoServizio(!ApplicationSettings.isServiceEnabled());
-
         serviceStartButton.setText(ApplicationUtility.getServiceStatusButtonLabel(getApplicationContext(), servizioAvviato));
         serviceStartButton.setChecked(servizioAvviato);
 
-        //s = (ApplicationSettings.isServiceEnabled())?getString(R.string.stopServiceButtonText):getString(R.string.startServiceButtonText);
         textView.setText(ApplicationUtility.getServiceStatusTextLabel(getApplicationContext(), servizioAvviato));
     }
     public void goInBackground(View v) {
-        ApplicationSettings.savePreferences(getApplicationContext());
+        applicationSettings.savePreferences(getApplicationContext());
         finish();
+    }
+
+    @Override
+    public void onTrimMemory(int level){
+        super.onTrimMemory(level);
+
+        // Salvo alcune variabili per debug
+        ACRA.getErrorReporter().putCustomData("Event at " + System.currentTimeMillis()+ " -> "+ Thread.currentThread().getStackTrace()[2].getClassName().replace(".","_"),
+                Thread.currentThread().getStackTrace()[2].getMethodName());
+    }
+
+    @Override
+    public void onLowMemory(){
+        super.onLowMemory();
+
+        // Salvo alcune variabili per debug
+        ACRA.getErrorReporter().putCustomData("Event at " + System.currentTimeMillis()+ " -> "+ Thread.currentThread().getStackTrace()[2].getClassName().replace(".","_"),
+                Thread.currentThread().getStackTrace()[2].getMethodName());
+
+    }
+
+    @Override
+    public void onRestart(){
+        super.onRestart();
+
+        // Salvo alcune variabili per debug
+        ACRA.getErrorReporter().putCustomData("Event at " + System.currentTimeMillis()+ " -> "+ Thread.currentThread().getStackTrace()[2].getClassName().replace(".","_"),
+                Thread.currentThread().getStackTrace()[2].getMethodName());
+
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        // Salvo alcune variabili per debug
+        ACRA.getErrorReporter().putCustomData("Event at " + System.currentTimeMillis()+ " -> "+ Thread.currentThread().getStackTrace()[2].getClassName().replace(".","_"),
+                Thread.currentThread().getStackTrace()[2].getMethodName());
+
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        // Salvo alcune variabili per debug
+        ACRA.getErrorReporter().putCustomData("Event at " + System.currentTimeMillis()+ " -> "+ Thread.currentThread().getStackTrace()[2].getClassName().replace(".","_"),
+                Thread.currentThread().getStackTrace()[2].getMethodName());
+
     }
 
     @Override
     public void onResume(){
         super.onResume();
+
+        // Salvo alcune variabili per debug
+        ACRA.getErrorReporter().putCustomData("Event at " + System.currentTimeMillis()+ " -> "+ Thread.currentThread().getStackTrace()[2].getClassName().replace(".","_"),
+                Thread.currentThread().getStackTrace()[2].getMethodName());
+
         aggiornaInterfaccia();
 
         // Un po' sporca ma efficace
         // Recupero l'ultima posizione memorizzata accedendo a variabili protected
         // Di norma mi affido ad un broadcast receiver
-        if (ApplicationSettings.isServiceEnabled()) {
+        if (applicationSettings.isServiceEnabled()) {
             lat = LogPositionLocationListener.lat;
             lon = LogPositionLocationListener.lon;
             alt = LogPositionLocationListener.alt;
@@ -217,7 +280,12 @@ public class MainActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageFromServiceReceiver);
         super.onPause();
-        ApplicationSettings.savePreferences(getApplicationContext());
+
+        // Salvo alcune variabili per debug
+        ACRA.getErrorReporter().putCustomData("Event at " + System.currentTimeMillis()+ " -> "+ Thread.currentThread().getStackTrace()[2].getClassName().replace(".","_"),
+                Thread.currentThread().getStackTrace()[2].getMethodName());
+
+        applicationSettings.savePreferences(getApplicationContext());
         Log.e(this.getClass().getSimpleName(), "In pausa");
     }
 
@@ -225,38 +293,43 @@ public class MainActivity extends AppCompatActivity {
     public void onDestroy(){
         super.onDestroy();
 
-       // TODO: verificare se è compatibile con i metodi startService e stopService
+        // Salvo alcune variabili per debug
+        ACRA.getErrorReporter().putCustomData("Event at " + System.currentTimeMillis()+ " -> "+ Thread.currentThread().getStackTrace()[2].getClassName().replace(".","_"),
+                Thread.currentThread().getStackTrace()[2].getMethodName());
+
+        // TODO: verificare se è compatibile con i metodi startService e stopService
         doUnbindService();
 
         Log.e(this.getClass().getSimpleName(),"Distrutta");
     }
+
     private void aggiornaInterfaccia() {
-        ApplicationSettings.loadPreferences(getApplicationContext());
+        applicationSettings.loadPreferences(getApplicationContext());
 
         TextView textView = (TextView) findViewById(R.id.txtStatoLogging);
-        textView.setText(ApplicationUtility.getServiceStatusTextLabel(getApplicationContext(), ApplicationSettings.isServiceEnabled()));
+        textView.setText(ApplicationUtility.getServiceStatusTextLabel(getApplicationContext(), applicationSettings.isServiceEnabled()));
 
         textView = (TextView) findViewById(R.id.valNumSat);
         textView.setText(
-                String.format("%d / %d", ApplicationSettings.getSatelliti(),ApplicationSettings.getMaxSatelliti())
+                String.format("%d / %d", applicationSettings.getSatelliti(),applicationSettings.getMaxSatelliti())
         );
 
         textView=(TextView)findViewById(R.id.txtStatoGPS);
         textView.setText(ApplicationUtility.getServiceStatusTextLabel(getApplicationContext(), locationManager.isProviderEnabled("gps")));
 
         ToggleButton button = (ToggleButton) findViewById(R.id.btnStartStopService);
-        button.setText(ApplicationUtility.getServiceStatusButtonLabel(getApplicationContext(), ApplicationSettings.isServiceEnabled()));
-        button.setChecked(ApplicationSettings.isServiceEnabled());
+        button.setText(ApplicationUtility.getServiceStatusButtonLabel(getApplicationContext(), applicationSettings.isServiceEnabled()));
+        button.setChecked(applicationSettings.isServiceEnabled());
 
-        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBarServiceRunning);
-        if (ApplicationSettings.isServiceEnabled()) {
+        RatingBar progressBar = (RatingBar) findViewById(R.id.progressBarServiceRunning);
+        if (applicationSettings.isServiceEnabled()) {
             progressBar.setVisibility(View.VISIBLE);
             progressBar.setProgress(1);
         } else {
             progressBar.setVisibility(View.INVISIBLE);
         }
 
-        File f = ApplicationSettings.getfileSalvataggio();
+        File f = applicationSettings.getFileSalvataggio();
         if (f.exists()){
             textView = (TextView) findViewById(R.id.txtLogFileName);
             textView.setText(f.getAbsolutePath());
@@ -272,11 +345,11 @@ public class MainActivity extends AppCompatActivity {
         // TODO: solo per testare le settings preferences class
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 
-        String s = sp.getString("sync_frequency","");
+        String s = sp.getString("sync_frequency",Long.toString(applicationSettings.getMinTimeLocationUpdate()));
         textView = (TextView) findViewById(R.id.valPollingTime);
         textView.setText(s);
 
-        s = sp.getString("sync_space","");
+        s = sp.getString("sync_space",String.format("%.0f",applicationSettings.getMinDistanceLocationUpdate()));
         textView = (TextView) findViewById(R.id.valPollingSpace);
         textView.setText(s);
 
@@ -284,7 +357,7 @@ public class MainActivity extends AppCompatActivity {
 //        textView = (TextView) findViewById(R.id.valNumSat);
 //        textView.setText(s);
 
-        s=Long.toString(ApplicationSettings.getPuntiSalvati());
+        s=Long.toString(applicationSettings.getPuntiSalvati());
         textView = (TextView) findViewById(R.id.valPuntiSalvati);
         textView.setText(s);
     }
@@ -292,18 +365,18 @@ public class MainActivity extends AppCompatActivity {
     private void aggiornaValoriStatoGPS(){
         TextView textView;
         textView = (TextView) findViewById(R.id.valAltitudine);
-        textView.setText(String.format("%f",alt));
+        textView.setText(String.format("%.0f",alt));
         textView = (TextView) findViewById(R.id.valLatitudine);
         textView.setText(String.format("%f",lat));
         textView = (TextView) findViewById(R.id.valLongitudine);
         textView.setText(String.format("%f",lon));
 
         textView = (TextView) findViewById(R.id.valBussola);
-        textView.setText(String.format("%f",dir));
+        textView.setText(String.format("%.0f",dir));
         textView = (TextView) findViewById(R.id.valVelocita);
-        textView.setText(String.format("%f",vel));
+        textView.setText(String.format("%.0f",vel));
         textView = (TextView) findViewById(R.id.valPrecisione);
-        textView.setText(String.format("%f",acc));
+        textView.setText(String.format("%.0f",acc));
         textView = (TextView) findViewById(R.id.valTempo);
         textView.setText(String.format("%d",tempo));
     }

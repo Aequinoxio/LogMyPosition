@@ -18,7 +18,7 @@
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" >
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -44,6 +44,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.utente.logmyposition.MainActivity" />
         </activity>
+        <activity
+            android:name=".SimpleSettingsActivity"
+            android:label="@string/title_activity_show_log_file_content"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.utente.logmyposition.MainActivity" />
+        </activity>
+
     </application>
 
 </manifest>

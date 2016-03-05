@@ -5,12 +5,12 @@ import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TableRow.LayoutParams;
 import android.widget.TextView;
+
+import org.acra.ACRA;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -25,9 +25,15 @@ public class ShowLogFileContent extends AppCompatActivity {
     TableRow riga=null;
     TextView valore=null;
 
-    @Override
+    ApplicationSettings applicationSettings = ApplicationSettings.getInstance();
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Salvo alcune variabili per debug
+        ACRA.getErrorReporter().putCustomData("Event at " + System.currentTimeMillis()+ " -> "+ Thread.currentThread().getStackTrace()[2].getClassName().replace(".","_"),
+                Thread.currentThread().getStackTrace()[2].getMethodName());
+
         setContentView(R.layout.activity_show_log_file_content);
         mostraLogFile();
     }
@@ -59,7 +65,7 @@ public class ShowLogFileContent extends AppCompatActivity {
      *
      */
     private void mostraLogFile(){
-        File dataFile = ApplicationSettings.getfileSalvataggio();
+        File dataFile = applicationSettings.getFileSalvataggio();
         byte[] buffer = new byte[1024];
         StringBuilder sb = new StringBuilder();
         String linea=null;
@@ -72,7 +78,7 @@ public class ShowLogFileContent extends AppCompatActivity {
         BufferedReader bufferedReader;
 
         // TODO: Costanti cablate
-        linea="UUID_Sessione;Contatore;Data locale;Tempo_GPS;Latitudine;Longitudine;Altitudine;Velocità;Orientamento;Accuratezza";
+        linea="UUID_Sessione;Contatore;Data locale;Tempo_GPS;Latitudine;Longitudine;Altitudine;Velocità;Orientamento;Accuratezza;Polling spazio (m);Polling tempo (s)";
         aggiungiATabella(linea,1);
 
         try {
