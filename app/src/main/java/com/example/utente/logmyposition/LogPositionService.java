@@ -17,6 +17,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
+import android.media.RingtoneManager;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Debug;
@@ -29,6 +30,7 @@ import android.widget.Toast;
 import org.acra.ACRA;
 
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -42,6 +44,7 @@ public class LogPositionService extends Service implements GpsStatus.Listener {
     private Timer timer;
 
     private NotificationManager mNM;
+    Notification myNotication ;
     private int NOTIFICATION = R.string.local_service_started;
 
     private boolean servizioAvviato=false;
@@ -54,7 +57,7 @@ public class LogPositionService extends Service implements GpsStatus.Listener {
     ApplicationSettings applicationSettings = ApplicationSettings.getInstance();
 
     // Receiver per aggiornare la parte dell'interfaccia di competenza del servizio (es. notifica)
-    // Filtro AgiornaInterfaccia
+    // Filtro AggiornaInterfaccia
     private BroadcastReceiver mMessageFromListenerReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -254,7 +257,7 @@ public class LogPositionService extends Service implements GpsStatus.Listener {
             double lo=Math.random()*20;
             mock.pushLocation(la,lo);
             Log.e(getClass().getSimpleName(),"Mocking..."+
-            String.format("%f",la)+ " - "+ String.format("%f",lo)
+            String.format(Locale.ITALY,"%f",la)+ " - "+ String.format(Locale.ITALY,"%f",lo)
             );
         }
     }
@@ -269,8 +272,12 @@ public class LogPositionService extends Service implements GpsStatus.Listener {
                 R.string.local_service_started : R.string.local_service_disconnected
         );
 
+        String sTicker="Punti salvati: " + applicationSettings.getPuntiSalvati();
+        //text+=" "+sTicker+"\n";
+
         text+=(applicationSettings.isGPSAvailable()?" (GPS Abilitato)":" (GPS Disabilitato)");
 
+        /*
         // Set the icon, scrolling text and timestamp
         Notification notification = new Notification(R.drawable.ic_main_w, text,
                 System.currentTimeMillis());
@@ -286,6 +293,41 @@ public class LogPositionService extends Service implements GpsStatus.Listener {
         // Send the notification.
         //mNM.notify(ApplicationSettings.getNotificationID(), notification);
         mNM.notify(NOTIFICATION, notification);
+*/
+        ///////////////
+
+        // The PendingIntent to launch our activity if the user selects this notification
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+                new Intent(this, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Notification.Builder builder = new Notification.Builder(this);
+
+        builder.setAutoCancel(false);
+        builder.setTicker(sTicker);
+        builder.setSubText(sTicker);
+        builder.setShowWhen(true);
+        builder.setContentTitle(getText(R.string.local_service_label));
+        builder.setContentText(sTicker);
+
+        // Log.e(Thread.currentThread().getStackTrace()[2].getMethodName()+" - 2",phrase);
+
+        builder.setSmallIcon(R.drawable.ic_main_w);
+        builder.setContentIntent(contentIntent);
+        builder.setOngoing(true);
+        // builder.setSubText("Nuovo punto registrato");   //API level 16
+
+        //builder.addAction(R.drawable.ic_account_balance_black_18dp,"Condividi", pendingIntentBtn2);
+
+        builder.setOnlyAlertOnce(false);
+
+        builder.setStyle(new Notification.BigTextStyle(builder).bigText(text));
+
+        myNotication= builder.build();
+
+        // myNotication.flags |= Notification.FLAG_INSISTENT;
+        myNotication.flags |= Notification.VISIBILITY_PUBLIC;
+
+        mNM.notify(NOTIFICATION, myNotication);
     }
 
     private void aggiornaMainActivity(){
@@ -298,13 +340,19 @@ public class LogPositionService extends Service implements GpsStatus.Listener {
         // Set the no. of available satellites.
         final GpsStatus gs = this.locationManager.getGpsStatus(null);
         int i = 0;
+        int used=0;
 
         final Iterator<GpsSatellite> it = gs.getSatellites().iterator();
         while (it.hasNext()) {
-            it.next();
+            GpsSatellite gpsSatellite=it.next();
+            // it.next();
+            if(gpsSatellite.getSnr()>0.0f){
+                used++;
+            }
             i++;
         }
-        applicationSettings.setSatelliti(i,gs.getMaxSatellites());
+        //applicationSettings.setSatelliti(i,gs.getMaxSatellites());
+        applicationSettings.setSatelliti(used, i);
 
         return i;
     }

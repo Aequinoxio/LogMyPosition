@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.utente.logmyposition.ShowLogFileContentlistView">
+    <!-- Header -->
+
+    <!-- List Divider -->
+
+    <!-- ListView (grid_items) -->
+
+    <HorizontalScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/horizontalScrollView2" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout android:id="@+id/header"
+                android:background="#ff347c12"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                >
+                <TextView android:id="@+id/item1"
+                    android:layout_height="fill_parent"
+                    android:layout_width="wrap_content"
+                    android:width="50dip"
+                    android:height="20dip"
+                    android:text="n." />
+                <TextView android:id="@+id/item2"
+                    android:layout_height="fill_parent"
+                    android:layout_width="wrap_content"
+                    android:text="UUID Sessione"
+                    android:width="300dip"
+                    android:height="20dip"
+                    />
+                <TextView android:id="@+id/item3"
+                    android:layout_height="fill_parent"
+                    android:layout_width="wrap_content"
+                    android:text="Contatore"
+                    android:width="100dip"
+                    android:height="20dip"
+                    />
+                <TextView android:id="@+id/item4"
+                    android:layout_height="fill_parent"
+                    android:layout_width="wrap_content"
+                    android:text="Data locale"
+                    android:width="250dip"
+                    android:height="20dip"
+                    />
+
+                <TextView android:id="@+id/item5"
+                    android:layout_height="fill_parent"
+                    android:layout_width="wrap_content"
+                    android:text="Tempo GPS"
+                    android:width="110dip"
+                    android:height="20dip"
+                    />
+
+                <TextView android:id="@+id/item6"
+                    android:layout_height="fill_parent"
+                    android:layout_width="wrap_content"
+                    android:text="Latitudine"
+                    android:width="150dip"
+                    android:height="20dip"
+                    />
+
+                <TextView android:id="@+id/item7"
+                    android:layout_height="fill_parent"
+                    android:layout_width="wrap_content"
+                    android:text="Longitudine"
+                    android:width="150dip"
+                    android:height="20dip"
+                    />
+                <TextView android:id="@+id/item8"
+                    android:layout_height="fill_parent"
+                    android:layout_width="wrap_content"
+                    android:text="Altitudine"
+                    android:width="100dip"
+                    android:height="20dip"
+                    />
+                <TextView android:id="@+id/item9"
+                    android:layout_height="fill_parent"
+                    android:layout_width="wrap_content"
+                    android:text="Velocità"
+                    android:width="100dip"
+                    android:height="20dip"
+                    />
+                <TextView android:id="@+id/item10"
+                    android:layout_height="fill_parent"
+                    android:layout_width="wrap_content"
+                    android:text="Orientamento"
+                    android:width="100dip"
+                    android:height="20dip"
+                    />
+                <TextView android:id="@+id/item11"
+                    android:layout_height="fill_parent"
+                    android:layout_width="wrap_content"
+                    android:text="Accuratezza"
+                    android:width="100dip"
+                    android:height="20dip"
+                    />
+                <TextView android:id="@+id/item12"
+                    android:layout_height="fill_parent"
+                    android:layout_width="wrap_content"
+                    android:text="Polling spazio (m)"
+                    android:width="120dip"
+
+                    />
+                <TextView android:id="@+id/item13"
+                    android:layout_height="fill_parent"
+                    android:layout_width="wrap_content"
+                    android:text="Polling tempo (s)"
+                    android:width="110dip"
+
+                    />
+
+            </LinearLayout>
+
+            <View android:layout_width="fill_parent"
+                android:layout_height="1dip"
+                android:background="?android:attr/listDivider" />
+
+            <LinearLayout android:id="@+id/layout"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_below="@+id/header">
+                <ListView android:id="@+id/listview"
+                    android:layout_height="fill_parent"
+                    android:layout_width="fill_parent">
+                </ListView>
+            </LinearLayout>
+        </RelativeLayout>
+    </HorizontalScrollView>
+</RelativeLayout>

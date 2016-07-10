@@ -38,6 +38,7 @@ public class LogPositionLocationListener implements LocationListener {
     LogPositionLocationListener(Context context){
         this.context=context;
     }
+
     @Override
     public void onLocationChanged(Location location) {
 
@@ -48,6 +49,12 @@ public class LogPositionLocationListener implements LocationListener {
         salvaDati(location);
 
         aggiornaMainActivity(location);
+
+        // Aggiorno il servizio
+        // Aggiorno tutte le componenti impostate su questo intent filter
+        Intent intent=new Intent("AggiornaInterfaccia");
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+
     }
 
     @Override
@@ -127,6 +134,11 @@ public class LogPositionLocationListener implements LocationListener {
         /*
             UUID_Sessione;contatore; data locale;tempo_GPS;latitudine;longitudine;altitudine;velocità;orientamento; accuratezza
          */
+
+//        if (!applicationSettings.isSaveDataEnabled()){
+//            return;
+//        }
+
         // Salvo la data corrente
         Date date= new Date();
         SimpleDateFormat ft = new SimpleDateFormat ("EEE yyyy.MM.dd - HH:mm:ss ZZZZ", Locale.getDefault());

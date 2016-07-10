@@ -38,4 +38,8 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="title_activity_show_log_file_content">ShowLogFileContent</string>
     <string name="txtFileSize">Dim. file</string>
+    <string name="title_activity_show_log_file_contentlist_view">ShowLogFileContentlistView</string>
+    <string name="session_uuid">UUID</string>
+
+    <string name="gpsSatellitesTypes">*GP=GPS  GL=GLONASS  BE=BEIDOU  SB=SBAS  QZ=QZSS  na=Id non usata</string>
 </resources>

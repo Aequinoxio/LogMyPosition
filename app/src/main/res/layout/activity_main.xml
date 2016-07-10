@@ -365,4 +365,29 @@
 
     </GridLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/session_uuid"
+        android:id="@+id/textView9"
+        android:layout_below="@+id/valoriFile"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/NoValue"
+        android:id="@+id/txtSessionUUID"
+        android:layout_below="@+id/textView9"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Satelliti"
+        android:id="@+id/button"
+        android:layout_above="@+id/btnBackgroudButton"
+        android:layout_centerHorizontal="true"
+        android:onClick="startGpsSatActivity" />
+
 </RelativeLayout>

@@ -34,6 +34,17 @@ public class ApplicationSettings {
 
     public static final boolean MOCKLOCATION=false;
 
+    protected boolean saveDataEnabled=false;
+
+    public boolean isSaveDataEnabled() {
+        return saveDataEnabled;
+    }
+
+    public void setSaveDataEnabled(boolean saveDataEnabled) {
+        this.saveDataEnabled = saveDataEnabled;
+    }
+
+
     /*
     // Id per trattare la notifica
     private static final int NOTIFICATION = R.string.local_service_started;
@@ -78,7 +89,7 @@ public class ApplicationSettings {
      * imposta il numero dei satelliti rilevati
      * @param num
      */
-    public  void setSatelliti(int num){
+    public void setSatelliti(int num){
         setSatelliti(num, maxSatelliti);
     }
 

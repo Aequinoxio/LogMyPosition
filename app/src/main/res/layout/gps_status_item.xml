@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    style="@android:style/Widget.Holo.ProgressBar.Horizontal">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="32dp"
+            android:layout_height="wrap_content"
+            android:text="txtConst"
+            android:id="@+id/txtConst" />
+
+        <TextView
+            android:layout_width="32dp"
+            android:layout_height="wrap_content"
+            android:text="PRN"
+            android:id="@+id/txtPRN" />
+
+        <TextView
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:text="txtFix"
+            android:id="@+id/txtFix" />
+
+        <TextView
+            android:layout_width="64dp"
+            android:layout_height="wrap_content"
+            android:text="txtAz"
+            android:id="@+id/txtAz" />
+
+        <TextView
+            android:layout_width="64dp"
+            android:layout_height="wrap_content"
+            android:text="txtEle"
+            android:id="@+id/txtEle" />
+
+        <TextView
+            android:layout_width="48sp"
+            android:layout_height="wrap_content"
+            android:text="txtSNRStatus"
+            android:id="@+id/txtSNRStatus" />
+
+        <ProgressBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/progressBarSNR"
+            style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
+            android:filterTouchesWhenObscured="false"
+            android:progress="20" />
+    </LinearLayout>
+
+    <View style="@style/Divider"
+        android:layout_above="@+id/textView"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/view" />
+</LinearLayout>

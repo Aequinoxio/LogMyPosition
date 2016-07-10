@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:orientation="horizontal"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent">
+
+    <TextView android:id="@+id/item1"
+    android:text="n."
+    android:layout_height="fill_parent"
+    android:layout_width="wrap_content"
+    android:width="50dip"
+    />
+<TextView android:id="@+id/item2"
+    android:text="col_1"
+    android:layout_height="fill_parent"
+    android:layout_width="wrap_content"
+    android:width="300dip"
+    />
+<TextView android:id="@+id/item3"
+    android:text="col_2"
+    android:layout_height="fill_parent"
+    android:layout_width="wrap_content"
+    android:width="100dip"
+    />
+<TextView android:id="@+id/item4"
+    android:text="col_3"
+    android:layout_height="fill_parent"
+    android:layout_width="wrap_content"
+    android:width="250dip"
+    />
+
+    <TextView android:id="@+id/item5"
+        android:text="col_4"
+        android:layout_height="fill_parent"
+        android:layout_width="wrap_content"
+        android:width="110dip"
+        />
+
+    <TextView android:id="@+id/item6"
+        android:text="col_5"
+        android:layout_height="fill_parent"
+        android:layout_width="wrap_content"
+        android:width="150dip"
+        />
+    <TextView android:id="@+id/item7"
+        android:text="col_6"
+        android:layout_height="fill_parent"
+        android:layout_width="wrap_content"
+        android:width="150dip"
+        />
+    <TextView android:id="@+id/item8"
+        android:text="col_7"
+        android:layout_height="fill_parent"
+        android:layout_width="wrap_content"
+        android:width="100dip"
+        />
+    <TextView android:id="@+id/item9"
+        android:text="col_8"
+        android:layout_height="fill_parent"
+        android:layout_width="wrap_content"
+        android:width="100dip"
+        />
+    <TextView android:id="@+id/item10"
+        android:text="col_9"
+        android:layout_height="fill_parent"
+        android:layout_width="wrap_content"
+        android:width="100dip"
+        />
+    <TextView android:id="@+id/item11"
+        android:text="col_10"
+        android:layout_height="fill_parent"
+        android:layout_width="wrap_content"
+        android:width="100dip"
+        />
+    <TextView android:id="@+id/item12"
+        android:text="col_11"
+        android:layout_height="fill_parent"
+        android:layout_width="wrap_content"
+        android:width="120dip"
+        />
+
+    <TextView android:id="@+id/item13"
+        android:text="col_11"
+        android:layout_height="fill_parent"
+        android:layout_width="wrap_content"
+        android:width="110dip"
+        />
+
+</LinearLayout>

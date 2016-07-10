@@ -24,8 +24,10 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import org.acra.ACRA;
+import org.w3c.dom.Text;
 
 import java.io.File;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -146,10 +148,27 @@ public class MainActivity extends AppCompatActivity {
      * @param v
      */
     public void showLogFile(View v){
-        Intent intent = new Intent(getApplicationContext(), ShowLogFileContent.class);
+       // Intent intent = new Intent(getApplicationContext(), ShowLogFileContent.class);
+        Intent intent = new Intent(getApplicationContext(), ShowLogFileContentlistView.class);
+
         startActivity(intent);
 
     }
+
+    private void startGPSService(){
+        startService(new Intent(this, LogPositionService.class));
+    }
+
+    /**
+     * Avvia l'attività per mostrare lo stato dei satelliti
+     * @param v
+     */
+    public void startGpsSatActivity(View v){
+        Intent intent = new Intent(this,GpsSatellitesStatusActivity.class);
+        startActivity(intent);
+    }
+
+
     /**
      * Listener per avviare e fermare il servizio. Collegato al togglebutton btnStartStopService
      * @param v
@@ -177,12 +196,13 @@ public class MainActivity extends AppCompatActivity {
 
         progressBar.setVisibility(ApplicationUtility.getServiceStatusProgressVisibility(getApplicationContext(), servizioAvviato));
 
-        // Lo stato di attivazione lo imposta il serviziostesso
+        // Lo stato di attivazione lo imposta il servizio stesso
         serviceStartButton.setText(ApplicationUtility.getServiceStatusButtonLabel(getApplicationContext(), servizioAvviato));
         serviceStartButton.setChecked(servizioAvviato);
 
         textView.setText(ApplicationUtility.getServiceStatusTextLabel(getApplicationContext(), servizioAvviato));
     }
+
     public void goInBackground(View v) {
         applicationSettings.savePreferences(getApplicationContext());
         finish();
@@ -311,7 +331,7 @@ public class MainActivity extends AppCompatActivity {
 
         textView = (TextView) findViewById(R.id.valNumSat);
         textView.setText(
-                String.format("%d / %d", applicationSettings.getSatelliti(),applicationSettings.getMaxSatelliti())
+                String.format(Locale.ITALY,"%d / %d", applicationSettings.getSatelliti(),applicationSettings.getMaxSatelliti())
         );
 
         textView=(TextView)findViewById(R.id.txtStatoGPS);
@@ -349,7 +369,7 @@ public class MainActivity extends AppCompatActivity {
         textView = (TextView) findViewById(R.id.valPollingTime);
         textView.setText(s);
 
-        s = sp.getString("sync_space",String.format("%.0f",applicationSettings.getMinDistanceLocationUpdate()));
+        s = sp.getString("sync_space",String.format(Locale.ITALY,"%.0f",applicationSettings.getMinDistanceLocationUpdate()));
         textView = (TextView) findViewById(R.id.valPollingSpace);
         textView.setText(s);
 
@@ -360,25 +380,28 @@ public class MainActivity extends AppCompatActivity {
         s=Long.toString(applicationSettings.getPuntiSalvati());
         textView = (TextView) findViewById(R.id.valPuntiSalvati);
         textView.setText(s);
+
+        textView = (TextView)findViewById(R.id.txtSessionUUID);
+        textView.setText(applicationSettings.getSessione().toString());
     }
 
     private void aggiornaValoriStatoGPS(){
         TextView textView;
         textView = (TextView) findViewById(R.id.valAltitudine);
-        textView.setText(String.format("%.0f",alt));
+        textView.setText(String.format(Locale.ITALY,"%.0f",alt));
         textView = (TextView) findViewById(R.id.valLatitudine);
-        textView.setText(String.format("%f",lat));
+        textView.setText(String.format(Locale.ITALY,"%f",lat));
         textView = (TextView) findViewById(R.id.valLongitudine);
-        textView.setText(String.format("%f",lon));
+        textView.setText(String.format(Locale.ITALY,"%f",lon));
 
         textView = (TextView) findViewById(R.id.valBussola);
-        textView.setText(String.format("%.0f",dir));
+        textView.setText(String.format(Locale.ITALY,"%.0f",dir));
         textView = (TextView) findViewById(R.id.valVelocita);
-        textView.setText(String.format("%.0f",vel));
+        textView.setText(String.format(Locale.ITALY,"%.0f",vel));
         textView = (TextView) findViewById(R.id.valPrecisione);
-        textView.setText(String.format("%.0f",acc));
+        textView.setText(String.format(Locale.ITALY,"%.0f",acc));
         textView = (TextView) findViewById(R.id.valTempo);
-        textView.setText(String.format("%d",tempo));
+        textView.setText(String.format(Locale.ITALY,"%d",tempo));
     }
 
     ///////////////// Gestione comunicazione con il servizio
