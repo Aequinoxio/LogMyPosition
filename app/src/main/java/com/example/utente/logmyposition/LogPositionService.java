@@ -307,7 +307,7 @@ public class LogPositionService extends Service implements GpsStatus.Listener {
         builder.setSubText(sTicker);
         builder.setShowWhen(true);
         builder.setContentTitle(getText(R.string.local_service_label));
-        builder.setContentText(sTicker);
+        builder.setContentText(text);
 
         // Log.e(Thread.currentThread().getStackTrace()[2].getMethodName()+" - 2",phrase);
 
