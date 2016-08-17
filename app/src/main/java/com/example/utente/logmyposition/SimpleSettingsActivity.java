@@ -21,6 +21,8 @@ public class SimpleSettingsActivity extends PreferenceActivity  {
 
         bindPreferenceSummaryToValue(findPreference("sync_frequency"));
         bindPreferenceSummaryToValue(findPreference("sync_space"));
+        bindPreferenceSummaryToValue(findPreference("sync_filterType"));
+        bindPreferenceSummaryToValue(findPreference("sync_FOV"));
 
     }
 

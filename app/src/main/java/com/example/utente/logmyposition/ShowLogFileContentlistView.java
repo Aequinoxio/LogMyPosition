@@ -10,7 +10,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
-import com.example.utente.logmyposition.util.DimensionUtils;
+//import com.example.utente.logmyposition.util.DimensionUtils;
 
 import java.io.BufferedReader;
 import java.io.File;

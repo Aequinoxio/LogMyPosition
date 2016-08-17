@@ -16,7 +16,9 @@
         android:text="@string/NoValue"
         android:id="@+id/txtGpsStatus"
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:textColor="@android:color/black"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -24,7 +26,9 @@
         android:text="GPS Status"
         android:id="@+id/textView12"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:textColor="@android:color/black"
+        android:textStyle="bold" />
 
 
     <ListView
@@ -35,50 +39,62 @@
         android:id="@+id/listViewStatus"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/view"
-        android:layout_above="@+id/linearLayout2" />
+        android:layout_above="@+id/linearLayout2"
+        android:drawSelectorOnTop="false"
+        android:headerDividersEnabled="false" />
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/linearLayout"
-        android:layout_below="@+id/txtSatelliti"
-        android:layout_alignParentStart="true">
+        android:layout_below="@+id/tableLayout"
+        android:layout_alignParentEnd="true">
 
         <TextView
             android:layout_width="32dp"
             android:layout_height="match_parent"
             android:text="Sat*"
             android:id="@+id/textView13"
-            android:gravity="center_vertical" />
+            android:gravity="center_vertical"
+            android:textColor="@android:color/black"
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="32dp"
             android:layout_height="match_parent"
             android:text="Id"
             android:id="@+id/textView14"
-            android:gravity="center_vertical" />
+            android:gravity="center_vertical"
+            android:textColor="@android:color/black"
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="40dp"
             android:layout_height="match_parent"
             android:text="Fix"
             android:id="@+id/textView15"
-            android:gravity="center_vertical" />
+            android:gravity="center_vertical"
+            android:textColor="@android:color/black"
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="64dp"
             android:layout_height="match_parent"
             android:text="Azimuth"
             android:id="@+id/textView16"
-            android:gravity="center_vertical" />
+            android:gravity="center_vertical"
+            android:textColor="@android:color/black"
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="64dp"
             android:layout_height="match_parent"
             android:text="Elevation"
             android:id="@+id/textView17"
-            android:gravity="center_vertical" />
+            android:gravity="center_vertical"
+            android:textColor="@android:color/black"
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="match_parent"
@@ -87,7 +103,9 @@
             android:id="@+id/textView10"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:gravity="center_vertical|center_horizontal" />
+            android:gravity="center_vertical|center_horizontal"
+            android:textColor="@android:color/black"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <TextView
@@ -96,16 +114,20 @@
         android:text="Satelliti  "
         android:id="@+id/txtSatelliti"
         android:layout_below="@+id/textView12"
-        android:layout_alignParentStart="false" />
+        android:layout_alignParentStart="false"
+        android:textColor="@android:color/black"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="0 / 0"
+        android:text="0 / 0 / 0"
         android:id="@+id/txtSatCurrMax"
         android:layout_alignBaseline="@+id/txtSatelliti"
         android:layout_toEndOf="@+id/txtSatelliti"
-        android:layout_alignTop="@+id/txtSatelliti" />
+        android:layout_alignTop="@+id/txtSatelliti"
+        android:textColor="@android:color/black"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -113,7 +135,9 @@
         android:text="fixTime"
         android:id="@+id/txtFixTime"
         android:layout_alignEnd="@+id/linearLayout"
-        android:layout_alignTop="@+id/txtSatelliti" />
+        android:layout_alignTop="@+id/txtSatelliti"
+        android:textColor="@android:color/black"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -121,7 +145,9 @@
         android:text="Fix time (ms)  "
         android:id="@+id/textView11"
         android:layout_toStartOf="@+id/txtFixTime"
-        android:layout_alignTop="@+id/txtSatelliti" />
+        android:layout_alignTop="@+id/txtSatelliti"
+        android:textColor="@android:color/black"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -147,6 +173,16 @@
         android:id="@+id/view3"
         android:layout_alignTop="@id/textView18"/>
 
+    <View style="@style/Divider"
+        android:id="@+id/view4"
+        android:layout_alignTop="@id/tableLayout"/>
+
+    <View style="@style/Divider"
+        android:id="@+id/view5"
+        android:background="@android:color/black"
+        android:layout_alignBottom="@id/tableLayout"/>
+
+
     <TableLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -157,7 +193,8 @@
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -168,7 +205,8 @@
                 android:layout_above="@+id/textView18"
                 android:gravity="center_vertical"
                 android:layout_gravity="left|center_vertical"
-                android:textStyle="bold|italic" />
+                android:textStyle="bold|italic"
+                android:textColor="@android:color/black" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -178,7 +216,8 @@
                 android:drawableLeft="@drawable/ic_earth_element_96"
                 android:gravity="center_vertical"
                 android:layout_gravity="center"
-                android:textStyle="bold|italic" />
+                android:textStyle="bold|italic"
+                android:textColor="@android:color/black" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -188,14 +227,16 @@
                 android:drawableLeft="@drawable/ic_speed_96"
                 android:gravity="center_vertical"
                 android:layout_gravity="center_vertical|right"
-                android:textStyle="bold|italic" />
+                android:textStyle="bold|italic"
+                android:textColor="@android:color/black" />
 
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="fill_horizontal">
+            android:layout_gravity="fill_horizontal"
+            android:gravity="center_horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -205,7 +246,8 @@
                 android:drawableLeft="@drawable/ic_longitude_96"
                 android:gravity="center_vertical"
                 android:layout_gravity="left|center_vertical"
-                android:textStyle="bold|italic" />
+                android:textStyle="bold|italic"
+                android:textColor="@android:color/black" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -215,7 +257,8 @@
                 android:drawableLeft="@drawable/ic_gyroscope_96"
                 android:gravity="center_vertical"
                 android:layout_gravity="center"
-                android:textStyle="bold|italic" />
+                android:textStyle="bold|italic"
+                android:textColor="@android:color/black" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -225,9 +268,110 @@
                 android:id="@+id/txtPrec"
                 android:gravity="center_vertical"
                 android:layout_gravity="center_vertical|right"
-                android:textStyle="bold|italic" />
+                android:textStyle="bold|italic"
+                android:textColor="@android:color/black" />
         </TableRow>
 
+    </TableLayout>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:visibility="visible"
+        android:id="@+id/tableLayout"
+        android:layout_below="@+id/txtSatelliti"
+        android:layout_alignStart="@+id/linearLayout2"
+        android:stretchColumns="*">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView19"
+                android:text="BEIDOU "
+                android:layout_below="@+id/txtSatelliti"
+                android:layout_alignParentStart="true"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/NoValue"
+                android:id="@+id/txtSatBE"
+                android:layout_alignTop="@+id/textView19"
+                android:layout_alignStart="@+id/txtSatCurrMax"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView21"
+                android:layout_alignTop="@+id/txtSatBE"
+                android:layout_toEndOf="@+id/txtSatBE"
+                android:text="GLONASS"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/NoValue"
+                android:id="@+id/txtSatGLO"
+                android:layout_alignTop="@+id/textView21"
+                android:layout_toEndOf="@+id/textView21"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="GPS"
+                android:id="@+id/textView23"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/NoValue"
+                android:id="@+id/txtSatGPS"
+                android:textColor="@android:color/black" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="QZSS"
+                android:id="@+id/textView25"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/NoValue"
+                android:id="@+id/txtSatQZ"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SBASS"
+                android:id="@+id/textView27"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/NoValue"
+                android:id="@+id/txtSatSB"
+                android:textColor="@android:color/black" />
+
+        </TableRow>
     </TableLayout>
 
 

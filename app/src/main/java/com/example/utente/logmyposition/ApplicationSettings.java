@@ -33,8 +33,13 @@ public class ApplicationSettings {
     private final  String STATOFILESALVATAGGIO="STATOFILESALVATAGGIO";
 
     public static final boolean MOCKLOCATION=false;
+    public static final int SHARE_PICKER=777;
 
     protected boolean saveDataEnabled=false;
+    protected int lowPassFilterType;
+    protected boolean filterKalman;
+
+    protected int FOV;  // Angolo di vista per la realtà aumentata
 
     public boolean isSaveDataEnabled() {
         return saveDataEnabled;
@@ -56,7 +61,7 @@ public class ApplicationSettings {
     private  boolean servizioLogAttivato=false;
     private  boolean GPSAvailable =false;
     private  File fileSalvataggio=null;
-    private  long minTimeLocationUpdate=1000;        // 1 minuto per default tra un aggiornamento e l'altro
+    private  long minTimeLocationUpdate=10;        // 10 secondi per default tra un aggiornamento e l'altro
     private  float minDistanceLocationUpdate = 10.0f; // 10 metri per default tra un aggiornamento e l'altro
 
     private  int maxSatelliti=0;
@@ -180,6 +185,18 @@ public class ApplicationSettings {
         }
     }
 
+    public int getLowPassFilterType() {
+        return lowPassFilterType;
+    }
+
+    public int getFOV(){
+        return FOV;
+    }
+
+    public boolean isFilterKalman(){
+        return filterKalman;
+    }
+
     public void loadPreferences(Context context){
         sharedPreferences = context.getSharedPreferences(PREFNAME, 0);
         Map<String, ?> values = null;
@@ -203,6 +220,9 @@ public class ApplicationSettings {
         // TODO: Costanti di default cablate
         minDistanceLocationUpdate=Float.valueOf (sp.getString("sync_space","10"));
         minTimeLocationUpdate=Long.valueOf (sp.getString("sync_frequency","30"));
+        lowPassFilterType=Integer.valueOf (sp.getString("sync_filterType","1"));
+        FOV=Integer.valueOf (sp.getString("sync_FOV","92"));
+        filterKalman = sp.getBoolean("sync_KalmanFilter",true);
     }
 
     public File getFileSalvataggio(){

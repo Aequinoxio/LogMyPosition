@@ -7,43 +7,52 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/layoutRow">
 
         <TextView
             android:layout_width="32dp"
             android:layout_height="wrap_content"
             android:text="txtConst"
-            android:id="@+id/txtConst" />
+            android:id="@+id/txtConst"
+            android:textColor="@color/material_blue_grey_800" />
 
         <TextView
             android:layout_width="32dp"
             android:layout_height="wrap_content"
             android:text="PRN"
-            android:id="@+id/txtPRN" />
+            android:id="@+id/txtPRN"
+            android:textColor="@color/material_blue_grey_800" />
 
         <TextView
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:text="txtFix"
-            android:id="@+id/txtFix" />
+            android:id="@+id/txtFix"
+            android:textColor="@color/material_blue_grey_800" />
 
         <TextView
             android:layout_width="64dp"
             android:layout_height="wrap_content"
             android:text="txtAz"
-            android:id="@+id/txtAz" />
+            android:id="@+id/txtAz"
+            android:gravity="center_horizontal"
+            android:textColor="@color/material_blue_grey_800" />
 
         <TextView
             android:layout_width="64dp"
             android:layout_height="wrap_content"
             android:text="txtEle"
-            android:id="@+id/txtEle" />
+            android:id="@+id/txtEle"
+            android:gravity="center_horizontal"
+            android:textColor="@color/material_blue_grey_800" />
 
         <TextView
             android:layout_width="48sp"
             android:layout_height="wrap_content"
             android:text="txtSNRStatus"
-            android:id="@+id/txtSNRStatus" />
+            android:id="@+id/txtSNRStatus"
+            android:textColor="@color/material_blue_grey_800" />
 
         <ProgressBar
             android:layout_width="match_parent"
@@ -51,7 +60,8 @@
             android:id="@+id/progressBarSNR"
             style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
             android:filterTouchesWhenObscured="false"
-            android:progress="20" />
+            android:progress="20"
+            android:max="40" />
     </LinearLayout>
 
     <View style="@style/Divider"

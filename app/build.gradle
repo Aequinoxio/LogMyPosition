@@ -2,6 +2,14 @@ apply plugin: 'com.android.application'
 apply from: "../artifacts.gradle"
 
 android {
+    signingConfigs {
+        config {
+            storeFile file('C:/Users/utente/.android/my_android_keystore.jks')
+            keyAlias 'myandroidapps'
+            keyPassword '4eszaq1'
+            storePassword '1qazse4'
+        }
+    }
     compileSdkVersion 22
     buildToolsVersion '21.1.2'
     defaultConfig {
@@ -9,22 +17,41 @@ android {
         minSdkVersion 19
         targetSdkVersion 19
         versionCode 1
-        versionName '1.3.4'
+        versionName '1.4'
     }
     buildTypes {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             proguardFile 'C:/Users/utente/AppData/Local/Android/sdk/tools/proguard/proguard-android.txt'
+            signingConfig signingConfigs.config
         }
     }
     productFlavors {
+        production {
+            applicationId "com.example.utente.logmyposition.production"
+            versionName '1.4-prod'
+            minSdkVersion 19
+            signingConfig signingConfigs.config
+            targetSdkVersion 19
+            versionCode 1
+        }
+        staging {
+            applicationId "com.example.utente.logmyposition.staging"
+            versionName '1.4-staging'
+            minSdkVersion 19
+            signingConfig signingConfigs.config
+            targetSdkVersion 19
+            versionCode 1
+        }
     }
+    sourceSets { staging { java.srcDirs = ['src/staging/java', 'src/staging/java/'] } }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.android.support:support-v4:22.2.1'
-    compile files('libs/acra-4.6.2.jar')
+    compile 'com.ToxicBakery.viewpager.transforms:view-pager-transforms:1.2.32'
+    compile 'ch.acra:acra:4.9.0'
 }

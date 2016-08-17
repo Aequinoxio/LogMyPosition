@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/ZeroValue"
+        android:id="@+id/txtSpeedDecimals"
+        android:layout_gravity="center_horizontal"
+        android:textStyle="bold"
+        android:textSize="50sp"
+        android:gravity="bottom|right"
+        android:singleLine="false"
+        android:layout_marginBottom="25dp"
+        android:layout_above="@+id/view5"
+        android:layout_alignParentEnd="true"
+        android:layout_marginLeft="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/ZeroValue"
+        android:id="@+id/txtSpeed"
+        android:layout_gravity="center_horizontal"
+        android:textStyle="bold"
+        android:textSize="150sp"
+        android:gravity="right"
+        android:layout_alignParentTop="true"
+        android:singleLine="false"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/txtSpeedDecimals"
+        android:clickable="false" />
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/TableLayout2"
+        android:stretchColumns="*"
+        android:layout_below="@+id/txtSpeed"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true">
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/NoValue"
+                android:id="@+id/txtLat"
+                android:layout_above="@+id/textView18"
+                android:layout_gravity="left|center_vertical"
+                android:textStyle="bold|italic"
+                android:layout_column="0"
+                android:gravity="center_vertical|right"
+                android:textSize="20sp"
+                android:drawableLeft="@drawable/ic_latitude_96" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/NoValue"
+                android:id="@+id/txtCompass"
+                android:textStyle="bold|italic"
+                android:layout_column="1"
+                android:textSize="20sp"
+                android:drawableLeft="@android:drawable/ic_menu_compass"
+
+                android:gravity="center_vertical"
+                android:layout_gravity="center" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/NoValue"
+                android:id="@+id/txtHigh"
+                android:gravity="center_vertical"
+                android:layout_gravity="center_vertical|right"
+                android:textStyle="bold|italic"
+                android:textSize="20sp"
+                android:drawableLeft="@drawable/ic_earth_element_96"
+                android:layout_column="2" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="fill_horizontal"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/NoValue"
+                android:id="@+id/txtLon"
+                android:gravity="center_vertical"
+                android:layout_gravity="left|center_vertical"
+                android:textStyle="bold|italic"
+                android:layout_column="0"
+                android:textSize="20sp"
+                android:drawableLeft="@drawable/ic_longitude_96" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/NoValue"
+                android:id="@+id/txtOri"
+                android:gravity="center_vertical"
+                android:layout_gravity="center_horizontal"
+                android:textStyle="bold|italic"
+                android:layout_column="1"
+                android:textSize="20sp"
+                android:drawableLeft="@drawable/ic_gyroscope_96" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/NoValue"
+                android:id="@+id/txtPrec"
+                android:gravity="center_vertical"
+                android:layout_gravity="center|right"
+                android:textStyle="bold|italic"
+                android:textSize="20sp"
+                android:layout_column="2"
+                android:drawableLeft="@drawable/ic_length_96" />
+
+        </TableRow>
+
+    </TableLayout>
+    <View style="@style/Divider"
+        android:id="@+id/view5"
+        android:background="@android:color/black"
+        android:layout_alignBottom="@+id/txtSpeed"
+        android:layout_alignParentEnd="true" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="km/h"
+        android:id="@+id/txtSpeedUnit"
+        android:gravity="center_vertical"
+        android:layout_alignParentTop="true"
+        android:layout_alignEnd="@+id/txtSpeedDecimals" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Velocità"
+        android:id="@+id/textView22"
+        android:gravity="center_vertical"
+        android:lines="1"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/txtSpeedUnit" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/CondividiCon"
+        android:id="@+id/btnShare"
+        android:drawableLeft="@android:drawable/ic_menu_share"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imgCompass"
+
+        android:layout_below="@+id/TableLayout2"
+        android:src="@drawable/compass_rose_md"
+        android:rotation="0"
+        android:layout_alignEnd="@+id/txtSpeedDecimals"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/btnShare" />
+
+</RelativeLayout>

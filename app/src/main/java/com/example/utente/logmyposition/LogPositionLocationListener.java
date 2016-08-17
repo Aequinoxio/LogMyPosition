@@ -27,15 +27,15 @@ import java.util.Locale;
 public class LogPositionLocationListener implements LocationListener {
 
     // Provo a limitare i passaggi per i broadcast intent permettendo di leggere direttamente queste variabili
-    protected static double lat=0,lon=0,alt=0;
-    protected static float  vel=0,dir=0,acc=0;
-    protected static long   tempo=0;
+    public static double lat=0,lon=0,alt=0;
+    public static float  vel=0,dir=0,acc=0;
+    public static long   tempo=0;
 
-    private Context context=null;  // Provo a salvare il contesto quando creo l'oggetto
+    private Context context=null;  // Salvo il contesto quando creo l'oggetto
 
     private ApplicationSettings applicationSettings = ApplicationSettings.getInstance();
 
-    LogPositionLocationListener(Context context){
+    public LogPositionLocationListener(Context context){
         this.context=context;
     }
 

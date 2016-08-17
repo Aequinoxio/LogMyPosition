@@ -8,24 +8,16 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.ApplicationInfo;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.location.GpsSatellite;
 import android.location.GpsStatus;
-import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
-import android.media.RingtoneManager;
 import android.os.Binder;
-import android.os.Build;
-import android.os.Debug;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.acra.ACRA;
 
@@ -56,13 +48,22 @@ public class LogPositionService extends Service implements GpsStatus.Listener {
     // I singleton in Android possono essere deallocati se l'activity è chiusa dal S.O.
     ApplicationSettings applicationSettings = ApplicationSettings.getInstance();
 
+// fatto con un timertask (eseguiCompito)
+// TODO: emetto la notifica dei punti salvati ogni 10. Da fare meglio es emettere una notifica ogni x secondi
+//    private int notificationLag=0; // Indica ogni quanto devi punti emettere una notifica
+//    private final int notificationLagConst=9;
     // Receiver per aggiornare la parte dell'interfaccia di competenza del servizio (es. notifica)
     // Filtro AggiornaInterfaccia
     private BroadcastReceiver mMessageFromListenerReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             // Aggiorno l'interfaccia
-            showNotification();
+
+//            if (notificationLag++ >= notificationLagConst) {
+//                notificationLag=0;
+//              //  showNotification();
+//            }
+
         }
     };
 
@@ -72,10 +73,12 @@ public class LogPositionService extends Service implements GpsStatus.Listener {
         @Override
         public void onReceive(Context context, Intent intent) {
             // Aggiorno i parametri se sono stati modificati durante l'esecusione del servizio
+
+            locationManager.removeUpdates(locationListener);
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
                     applicationSettings.getMinTimeLocationUpdate(),
-                    applicationSettings.getMinDistanceLocationUpdate()
-                    , locationListener);
+                    applicationSettings.getMinDistanceLocationUpdate(),
+                    locationListener);
         }
     };
 
@@ -106,7 +109,10 @@ public class LogPositionService extends Service implements GpsStatus.Listener {
         Log.e(getClass().getSimpleName(), "Evento GPS Cambiato:"+s);
 
         aggiornaMainActivity();
-        showNotification();
+        // TODO :Verificare se è questo che fa mostrare sempre la notifica e non ogni 30 secondi
+        if (event != GpsStatus.GPS_EVENT_SATELLITE_STATUS) {
+            showNotification();
+        }
     }
     /**
      * Class for clients to access.  Because we know this service always
@@ -250,8 +256,10 @@ public class LogPositionService extends Service implements GpsStatus.Listener {
     }
 
 
+
     private void eseguiCompito() {
-        Log.e(getClass().getSimpleName(), "running");
+        // Log.e(getClass().getSimpleName(), "running");
+        showNotification();
         if (BuildConfig.DEBUG  && ApplicationSettings.MOCKLOCATION){
             double la=Math.random()*60;
             double lo=Math.random()*20;
@@ -277,28 +285,9 @@ public class LogPositionService extends Service implements GpsStatus.Listener {
 
         text+=(applicationSettings.isGPSAvailable()?" (GPS Abilitato)":" (GPS Disabilitato)");
 
-        /*
-        // Set the icon, scrolling text and timestamp
-        Notification notification = new Notification(R.drawable.ic_main_w, text,
-                System.currentTimeMillis());
-
         // The PendingIntent to launch our activity if the user selects this notification
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
-
-        // Set the info for the views that show in the notification panel.
-        notification.setLatestEventInfo(this, getText(R.string.local_service_label),
-                text, contentIntent);
-
-        // Send the notification.
-        //mNM.notify(ApplicationSettings.getNotificationID(), notification);
-        mNM.notify(NOTIFICATION, notification);
-*/
-        ///////////////
-
-        // The PendingIntent to launch our activity if the user selects this notification
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+                new Intent(this, MainTabbedActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification.Builder builder = new Notification.Builder(this);
 
@@ -310,7 +299,8 @@ public class LogPositionService extends Service implements GpsStatus.Listener {
         builder.setContentText(text);
 
         // Log.e(Thread.currentThread().getStackTrace()[2].getMethodName()+" - 2",phrase);
-
+//        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.compass_rose_md);
+//        builder.setLargeIcon(bitmap);
         builder.setSmallIcon(R.drawable.ic_main_w);
         builder.setContentIntent(contentIntent);
         builder.setOngoing(true);
@@ -338,6 +328,7 @@ public class LogPositionService extends Service implements GpsStatus.Listener {
 
     private int calcolaNumeroSatelliti(){
         // Set the no. of available satellites.
+
         final GpsStatus gs = this.locationManager.getGpsStatus(null);
         int i = 0;
         int used=0;
@@ -367,7 +358,7 @@ public class LogPositionService extends Service implements GpsStatus.Listener {
         timer = new Timer();
 
         // TODO: Costante cablata per la temporizzazione
-        timer.schedule(timerTask, 0, 5000);
+        timer.schedule(timerTask, 0, 30000);
     }
 
     private void avviaServizio(){

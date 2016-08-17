@@ -73,6 +73,33 @@
         <item>3000</item>
     </string-array>
 
+    <string name="pref_title_filter_type">Filtro uscita</string>
+    <string-array name="pref_title_filter_type_titles">
+        <item>Nessun filtro</item>
+        <item>Media mobile</item>
+        <item>Media smooted</item>
+        <item>Media noframerate</item>
+    </string-array>
+    <string-array name="pref_title_filter_type_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string name="pref_title_FOV">Angolo di vista</string>
+    <string-array name="pref_FOV_titles">
+        <item>23 gradi</item>
+        <item>46 gradi</item>
+        <item>92 gradi</item>
+        <item>150 gradi</item>
+    </string-array>
+    <string-array name="pref_FOV_values">
+        <item>46</item>
+        <item>92</item>
+        <item>184</item>
+        <item>300</item>
+    </string-array>
 
     <!--<string name="pref_title_system_sync_settings">System sync settings</string>-->
 

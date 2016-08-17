@@ -22,6 +22,7 @@ import android.support.v4.app.NavUtils;
 
 import java.util.List;
 
+// TODO: Classe da cancellare se è stata sostituita da SimpleSettingsActivity
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -233,6 +234,7 @@ public class SettingsActivity extends PreferenceActivity {
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("sync_frequency"));
             bindPreferenceSummaryToValue(findPreference("sync_space"));
+            bindPreferenceSummaryToValue(findPreference("sync_filterType"));
         }
     }
 }

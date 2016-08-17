@@ -8,7 +8,7 @@ import android.view.View;
  * Thanx to http://stackoverflow.com/questions/4605527/converting-pixels-to-dp
  *
  */
-public class DimensionUtils {
+class DimensionUtils {
     private static boolean isInitialised = false;
     private static float pixelsPerOneDp;
 

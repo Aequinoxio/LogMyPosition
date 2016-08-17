@@ -4,7 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import org.acra.ACRA;
-import org.acra.ACRAConfiguration;
+//import org.acra.ACRAConfiguration;
 import org.acra.ACRAConstants;
 import org.acra.ReportField;
 import org.acra.ReportingInteractionMode;

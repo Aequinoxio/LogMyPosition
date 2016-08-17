@@ -1,0 +1,58 @@
+<resources>
+    <string name="app_name">Log my position - staging</string>
+    <string name="crash_report">Crash rilevato, preparo il report</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="Autore">Gabriele Galluzzo</string>
+    <string name="descrizione">Mostro i parametri GPS, la locazione ecc. riguardanti la posizione e l\'orientamento del cellulare nel mondo.</string>
+
+    <string name="action_settings">Impostazioni</string>
+    <string name="action_about">About</string>
+    <string name="lblStatoLog">Stato servizio logging</string>
+    <string name="txtStatoLogging">------------------------</string>
+    <string name="NoValue">-------</string>
+    <string name="ZeroValue">0</string>
+    <string name="txtStatoLoggingRunning">In esecuzione</string>
+    <string name="txtStatoLoggingStopped">Fermato</string>
+    <string name="btnAvviaLog">Inizia log</string>
+    <string name="stopServiceButtonText">Ferma log</string>
+    <string name="startServiceButtonText">Inizia log</string>
+    <string name="btnGoInBackground"><![CDATA[Background & esci]]></string>
+    <string name="noGPSInfo">Gps non attivo o non disponibile per l\'applicazione\nNon mi attivo</string>
+    <string name="lblLongitudine">Longitudine</string>
+    <string name="lblLatitudine">Latitudine</string>
+    <string name="lblAltitudine">Altitudine</string>
+    <string name="lblVelocita">Velocità</string>
+    <string name="lblTempo">Tempo</string>
+    <string name="lblBussola">Orientamento</string>
+    <string name="lblAccuratezza">Accuratezza</string>
+    <string name="local_service_started">Servizio di registrazione avviato</string>
+    <string name="local_service_stopped">Servizio fermato</string>
+    <string name="local_service_label">Log my position</string>
+    <string name="local_service_connected">Connesso al servizio</string>
+    <string name="local_service_disconnected">Disconnesso dal servizio</string>
+    <string name="lblStatoGPS">Stato GPS</string>
+    <string name="txtNumeroSatelliti">Satelliti</string>
+    <string name="txtPollingTime">Polling time</string>
+    <string name="txtPollingSpace">Polling Space</string>
+    <string name="txtPuntiSalvati">Punti salvati</string>
+    <string name="txtFileName">Nome del file salvato</string>
+
+    <string name="title_activity_show_log_file">Visualizzazione file log</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_show_log_file_content">ShowLogFileContent</string>
+    <string name="txtFileSize">Dim. file</string>
+    <string name="title_activity_show_log_file_contentlist_view">ShowLogFileContentlistView</string>
+    <string name="session_uuid">UUID</string>
+
+    <string name="gpsSatellitesTypes">*GP=GPS  GL=GLONASS  BE=BEIDOU  SB=SBAS  QZ=QZSS  na=Id non usata</string>
+    <string name="title_activity_gpsSatellitesStatus">Stato Satelliti GPS</string>
+
+    <string name="CondividiCon">Condividi con…</string>
+    <string name="ShareMimeType">text/plain</string>
+    <string name="PosizioneNonConosciuta">Posizione non conosiuta</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

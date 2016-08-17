@@ -37,12 +37,12 @@ import java.util.StringTokenizer;
 
 public class GpsSatellitesStatusActivity extends ActionBarActivity implements GpsStatus.Listener{
 
-    LocationManager locationManager;
-    LocationListener locationListener;
-    GpsStatusAdapter gpsStatusAdapter;
-    ApplicationSettings applicationSettings = ApplicationSettings.getInstance();
+    private LocationManager locationManager;
+    private LocationListener locationListener;
+    private GpsStatusAdapter gpsStatusAdapter;
+    private ApplicationSettings applicationSettings = ApplicationSettings.getInstance();
 
-    GpsInfo[] mGpsInfo;
+    private GpsInfo[] mGpsInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +102,10 @@ public class GpsSatellitesStatusActivity extends ActionBarActivity implements Gp
         textView = (TextView) findViewById(R.id.txtFixTime);
         textView.setText(String.valueOf(gs.getTimeToFirstFix()));
 
-        int maxSat=0, currSat=0;
+        int maxSat=0, currSat=0, fixSat=0;
+        int[] SatType={0,0,0,0,0};
+        int[] SatTypeFix={0,0,0,0,0};
+        int SatTypeIndex=0;
         int satellitePRN;
 
         // Resetto lo stato GPS per mostrare quello attuale;
@@ -113,9 +116,30 @@ public class GpsSatellitesStatusActivity extends ActionBarActivity implements Gp
         while (it.hasNext()) {
             gpsSatellite=it.next();
 
-//            if(gpsSatellite.usedInFix()){
-//                used++;
-//            }
+            switch (GpsSatelliteType.getSatelliteType(gpsSatellite.getPrn())){
+                case BEIDOU:
+                    SatTypeIndex=0;
+                    break;
+                case GLONASS:
+                    SatTypeIndex=1;
+                    break;
+                case  GPS:
+                    SatTypeIndex=2;
+                    break;
+                case QZSS:
+                    SatTypeIndex=3;
+                    break;
+                case SBAS:
+                    SatTypeIndex=4;
+                    break;
+                default:
+                    SatTypeIndex=-1;
+            }
+
+
+            if(gpsSatellite.usedInFix()){
+                fixSat++;
+            }
             maxSat++;
 
             satellitePRN=gpsSatellite.getPrn();
@@ -124,12 +148,32 @@ public class GpsSatellitesStatusActivity extends ActionBarActivity implements Gp
                 currSat++;
             }
 
+            if (SatTypeIndex>=0){
+                SatType[SatTypeIndex]++;
+                if (gpsSatellite.usedInFix()){
+                    SatTypeFix[SatTypeIndex]++;
+                }
+            }
+
             mGpsInfo[satellitePRN].updateValues(gpsSatellite);
 
         }
 
+///////////////////// Aggiorno l'interfaccia
+
+        textView = (TextView) findViewById(R.id.txtSatBE);
+        textView.setText(String.format("%d (%d)",SatType[0],SatTypeFix[0]));
+        textView = (TextView) findViewById(R.id.txtSatGLO);
+        textView.setText(String.format("%d (%d)",SatType[1],SatTypeFix[1]));
+        textView = (TextView) findViewById(R.id.txtSatGPS);
+        textView.setText(String.format("%d (%d)",SatType[2],SatTypeFix[2]));
+        textView = (TextView) findViewById(R.id.txtSatQZ);
+        textView.setText(String.format("%d (%d)",SatType[3],SatTypeFix[3]));
+        textView = (TextView) findViewById(R.id.txtSatSB);
+        textView.setText(String.format("%d (%d)",SatType[4],SatTypeFix[4]));
+
         textView = (TextView)findViewById(R.id.txtSatCurrMax);
-        textView.setText(String.valueOf(maxSat)+" / "+String.valueOf(currSat));
+        textView.setText(String.valueOf(maxSat)+" / "+String.valueOf(currSat)+" ("+String.valueOf(fixSat)+")");
 
         gpsStatusAdapter.notifyDataSetChanged();
 //        int k= (int)(Math.random()*10);
@@ -169,6 +213,19 @@ public class GpsSatellitesStatusActivity extends ActionBarActivity implements Gp
 
         textView = (TextView) findViewById(R.id.txtPrec);
         textView.setText(R.string.NoValue);
+
+        textView = (TextView) findViewById(R.id.txtSatBE);
+        textView.setText(R.string.NoValue);
+        textView = (TextView) findViewById(R.id.txtSatGLO);
+        textView.setText(R.string.NoValue);
+        textView = (TextView) findViewById(R.id.txtSatGPS);
+        textView.setText(R.string.NoValue);
+        textView = (TextView) findViewById(R.id.txtSatQZ);
+        textView.setText(R.string.NoValue);
+        textView = (TextView) findViewById(R.id.txtSatSB);
+        textView.setText(R.string.NoValue);
+
+
     }
 
 
@@ -176,27 +233,27 @@ public class GpsSatellitesStatusActivity extends ActionBarActivity implements Gp
         @Override
         public void onLocationChanged(Location location) {
             TextView textView = (TextView) findViewById(R.id.txtLat);
-            String s=String.format(Locale.ITALY,"%+3.5f",location.getLatitude());
+            String s=String.format(Locale.ITALY,"%+3.6f",location.getLatitude());
             textView.setText(s);
 
             textView = (TextView) findViewById(R.id.txtLon);
-            s=String.format(Locale.ITALY,"%+3.5f",location.getLongitude());
+            s=String.format(Locale.ITALY,"%+3.6f",location.getLongitude());
             textView.setText(s);
 
             textView = (TextView) findViewById(R.id.txtHigh);
-            s=String.format(Locale.ITALY,"%3.0f",location.getAltitude());
+            s=String.format(Locale.ITALY,"%3.0f (m)",location.getAltitude());
             textView.setText(s);
 
             textView = (TextView) findViewById(R.id.txtPrec);
-            s=String.format(Locale.ITALY,"%3.0f",location.getAccuracy());
+            s=String.format(Locale.ITALY,"%3.0f (m)",location.getAccuracy());
             textView.setText(s);
 
             textView = (TextView) findViewById(R.id.txtSpeed);
-            s=String.format(Locale.ITALY,"%3.0f",location.getSpeed()*3.6f);
+            s=String.format(Locale.ITALY,"%3.0f (km/h)",location.getSpeed()*3.6f);
             textView.setText(s);
 
             textView = (TextView) findViewById(R.id.txtOri);
-            s=String.format(Locale.ITALY,"%3.0f",location.getBearing());
+            s=String.format(Locale.ITALY,"%3.0f°",location.getBearing());
             textView.setText(s);
 
             // location.getProvider();
@@ -255,10 +312,10 @@ public class GpsSatellitesStatusActivity extends ActionBarActivity implements Gp
             textView.setText(mGpsInfo[position].SatelliteConstellation);
 
             textView = (TextView) rowView.findViewById(R.id.txtAz);
-            textView.setText(String.valueOf((mGpsInfo[position].azimuth)));
+            textView.setText(String.format("%d°",(int)mGpsInfo[position].azimuth));
 
             textView = (TextView) rowView.findViewById(R.id.txtEle);
-            textView.setText(String.valueOf((mGpsInfo[position].elevation)));
+            textView.setText(String.format("%d°",(int)mGpsInfo[position].elevation));
 
             textView = (TextView) rowView.findViewById(R.id.txtFix);
             textView.setText(String.valueOf((mGpsInfo[position].usedInFix)));
@@ -333,7 +390,7 @@ public class GpsSatellitesStatusActivity extends ActionBarActivity implements Gp
     }
 
     enum GpsSatelliteTypeValue {
-        GPS,SBAS,NA,GLONASS, QZSS, BEIDOU;
+        GPS,SBAS,NA,GLONASS, QZSS, BEIDOU
     }
     private static class GpsSatelliteType{
         public static GpsSatelliteTypeValue getSatelliteType(int PRN){

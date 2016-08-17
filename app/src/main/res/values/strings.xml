@@ -3,10 +3,15 @@
     <string name="crash_report">Crash rilevato, preparo il report</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="Autore">Gabriele Galluzzo</string>
+    <string name="descrizione">Mostro i parametri GPS, la locazione ecc. riguardanti la posizione e l\'orientamento del cellulare nel mondo.</string>
+
     <string name="action_settings">Impostazioni</string>
+    <string name="action_about">About</string>
     <string name="lblStatoLog">Stato servizio logging</string>
     <string name="txtStatoLogging">------------------------</string>
     <string name="NoValue">-------</string>
+    <string name="ZeroValue">0</string>
     <string name="txtStatoLoggingRunning">In esecuzione</string>
     <string name="txtStatoLoggingStopped">Fermato</string>
     <string name="btnAvviaLog">Inizia log</string>
@@ -42,4 +47,14 @@
     <string name="session_uuid">UUID</string>
 
     <string name="gpsSatellitesTypes">*GP=GPS  GL=GLONASS  BE=BEIDOU  SB=SBAS  QZ=QZSS  na=Id non usata</string>
+    <string name="title_activity_gpsSatellitesStatus">Stato Satelliti GPS</string>
+
+    <string name="CondividiCon">Condividi con…</string>
+    <string name="ShareMimeType">text/plain</string>
+    <string name="PosizioneNonConosciuta">Posizione non conosiuta</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="pref_title_Kalman">Filtro ingresso KALMAN</string>
 </resources>
